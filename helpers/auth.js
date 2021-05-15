@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 let blacklist = [];
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -25,4 +26,4 @@ function signToken(user) {
     expiresIn: 5 * 60 * 60 /* horas */,
   });
 }
-module.exports = { authMiddleware, putOnBlacklist };
+module.exports = { authMiddleware, putOnBlacklist, signToken };
