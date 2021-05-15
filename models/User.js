@@ -4,13 +4,13 @@ class User {
   constructor() {
     this.firstName = "";
     this.lastName = "";
-    this.birthdayDate = new Date();
+    this._birthdayDate = new Date();
     this.phone = "";
     this.email = "";
 
     this.isAdmin = true;
     this._password = "";
-    this.createdAt = new Date();
+    this._createdAt = new Date();
     this.isOnline = false;
 
     this.photoUri = "";
@@ -32,16 +32,39 @@ class User {
     return this._password;
   }
 
+  set createdAt(newCreatedAt) {
+    this._createdAt =
+      newCreatedAt instanceof Date ? newCreatedAt : new Date(newCreatedAt);
+  }
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  set birthdayDate(newBirthdayDate) {
+    this._birthdayDate =
+      newBirthdayDate instanceof Date
+        ? newBirthdayDate
+        : new Date(newBirthdayDate);
+  }
+  get birthdayDate() {
+    return this._birthdayDate;
+  }
   async isPasswordValid(password) {
     return bcrypt.compare(password, this._password);
   }
 
   static fromJSON(json) {
+    const bypassProperties = ["_password"];
     let user = new User();
     for (let prop in user) {
       if (prop.startsWith("_")) {
         //propriedades privadas
-        user[prop] = json[prop.substring(1)];
+        if (bypassProperties.includes(prop)) {
+          user[prop] = json[prop.substring(1)];
+        } else {
+          let propName = prop.substring(1);
+          user[propName] = json[propName];
+        }
       } else user[prop] = json[prop];
     }
     return user;
