@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/logout", function (req, res) {
+router.post("/logout", authHelper.authMiddleware, function (req, res) {
   authHelper.putOnBlacklist(req.headers["x-access-token"]);
   res.end();
 });
