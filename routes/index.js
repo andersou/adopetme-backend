@@ -52,7 +52,9 @@ router.post(
   async (req, res) => {
     let userDAO = new UserDAO();
     try {
-      result = await userDAO.insert(User.fromJSON(req.body));
+      let user = User.fromJSON(req.body);
+      user.photoUri = req.file.filename;
+      result = await userDAO.insert(user);
       res.json({ success: true, userId: result.lastID }).end();
     } catch (error) {
       console.log(error);
