@@ -5,7 +5,7 @@ class UserDAO {
   async create() {
     let db = await database.open();
     await db.run(
-      "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName VARCHAR(255) NOT NULL ,lastName VARCHAR(255) NOT NULL , phone VARCHAR(24),birthdayDate DATE,email VARCHAR(255) NOT NULL UNIQUE ,isAdmin BOOLEAN DEFAULT FALSE,password VARCHAR(60)  NOT NULL ,createdAt DATETIME,isOnline BOOLEAN,photoUri VARCHAR(255),facebookProfile VARCHAR(255),registerConfirmed BOOLEAN DEFAULT FALSE,document VARCHAR(16)  NOT NULL ,address VARCHAR(255),number INTEGER,complement VARCHAR(255),neighborhood VARCHAR(32),city VARCHAR(64),zipcode INTEGER)"
+      "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName VARCHAR(255) NOT NULL ,lastName VARCHAR(255) NOT NULL , phone VARCHAR(24),birthdayDate DATE,email VARCHAR(255) NOT NULL UNIQUE ,isAdmin BOOLEAN DEFAULT FALSE,password VARCHAR(60)  NOT NULL ,createdAt DATETIME,isOnline BOOLEAN,photoUri VARCHAR(255),facebookProfile VARCHAR(255),registerConfirmed BOOLEAN DEFAULT FALSE,document VARCHAR(16)  NOT NULL ,address VARCHAR(255),number INTEGER,complement VARCHAR(64),neighborhood VARCHAR(64),city VARCHAR(64),zipcode INTEGER)"
     );
   }
   async fetch() {
