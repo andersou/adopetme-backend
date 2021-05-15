@@ -21,7 +21,7 @@ class UserDAO {
   async insert(user) {
     let db = await database.open();
     return await db.run(
-      "INSERT INTO ( firstName ,lastName , phone,birthdayDate ,email,isAdmin ,password ,createdAt ,isOnline ,photoUri ,facebookProfile ,registerConfirmed,document ,address ,number ,complement ,neighborhood ,city ,zipcode ) users VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+      "INSERT INTO  users  ( firstName ,lastName , phone,birthdayDate ,email,isAdmin ,password ,createdAt ,isOnline ,photoUri ,facebookProfile ,registerConfirmed,document ,address ,number ,complement ,neighborhood ,city ,zipcode ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
       user.firstName,
       user.lastName,
       user.phone,
@@ -45,4 +45,4 @@ class UserDAO {
   }
 }
 
-module.exports = PetDAO;
+module.exports = UserDAO;

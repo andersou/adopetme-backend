@@ -1,8 +1,8 @@
 const Pet = require("./models/Pet");
 const PetDAO = require("./dao/PetDAO");
 
-const Pet = require("./models/User");
-const PetDAO = require("./dao/UserDAO");
+const User = require("./models/User");
+const UserDAO = require("./dao/UserDAO");
 
 const faker = require("faker");
 

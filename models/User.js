@@ -38,7 +38,7 @@ class User {
 
   static fromJSON(json) {
     let user = new User();
-    for (prop in user) {
+    for (let prop in user) {
       if (prop.startsWith("_")) {
         //propriedades privadas
         user[prop] = json[prop.substring(1)];
