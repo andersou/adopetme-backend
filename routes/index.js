@@ -1,5 +1,6 @@
 const express = require("express");
 const UserDAO = require("../dao/UserDAO");
+const User = require("../models/User");
 const authHelper = require("../helpers/auth");
 const validationHelper = require("../helpers/validation");
 const multer = require("multer");
@@ -49,7 +50,14 @@ router.post(
   upload.single("avatar"),
   validationHelper.registerValidation,
   async (req, res) => {
-    res.json(req.file).end();
+    let userDAO = new UserDAO();
+    try {
+      result = await userDAO.insert(User.fromJSON(req.body));
+      res.json({ success: true, userId: result.lastID }).end();
+    } catch (error) {
+      console.log(error);
+      res.status(401).end();
+    }
   }
 );
 
