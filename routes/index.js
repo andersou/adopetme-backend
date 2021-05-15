@@ -23,7 +23,7 @@ router.post("/login", async (req, res) => {
   if (users.length > 0) {
     let user = users[0];
     if (await user.isPasswordValid(req.body.password)) {
-      const token = jwt.sign({ userId: 1 }, SECRET, { expiresIn: 300 });
+      const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: 300 });
       return res.json({ auth: true, token });
     } else {
       res.status(401).end();
