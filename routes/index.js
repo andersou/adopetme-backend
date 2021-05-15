@@ -1,6 +1,15 @@
 const express = require("express");
 const UserDAO = require("../dao/UserDAO");
 const authHelper = require("../helpers/auth");
+const validationHelper = require("../helpers/validation");
+const multer = require("multer");
+
+const upload = multer({
+  dest: "public/images",
+  limits: {
+    fileSize: 1024 * 1024,
+  },
+});
 
 const router = express.Router();
 
@@ -34,6 +43,15 @@ router.post("/login", async (req, res) => {
     res.status(403).end();
   }
 });
+
+router.post(
+  "/register",
+  upload.single("avatar"),
+  validationHelper.registerValidation,
+  async (req, res) => {
+    res.json(req.file).end();
+  }
+);
 
 router.post("/logout", authHelper.authMiddleware, function (req, res) {
   authHelper.putOnBlacklist(req.headers["x-access-token"]);
