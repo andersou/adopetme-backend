@@ -1,5 +1,6 @@
 const database = require("./database");
 const User = require("../models/User");
+//let UserDAO = require("./dao/UserDAO"); let userDAO = new UserDAO();
 class UserDAO {
   async create() {
     let db = await database.open();
@@ -14,6 +15,21 @@ class UserDAO {
     await db.each("SELECT * FROM users", (err, userRow) => {
       if (!err) users.push(User.fromJSON(userRow));
     });
+
+    return users;
+  }
+
+  async findByEmail(email) {
+    // executa SQL
+    let db = await database.open();
+    let users = [];
+    await db.each(
+      "SELECT * FROM users WHERE email = ?",
+      email,
+      (err, userRow) => {
+        if (!err) users.push(User.fromJSON(userRow));
+      }
+    );
 
     return users;
   }
