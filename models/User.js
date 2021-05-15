@@ -35,5 +35,16 @@ class User {
   async isPasswordValid(password) {
     return bcrypt.compare(password, this._password);
   }
+
+  static fromJSON(json) {
+    let user = new User();
+    for (prop in user) {
+      if (prop.startsWith("_")) {
+        //propriedades privadas
+        user[prop] = json[prop.substring(1)];
+      } else user[prop] = json[prop];
+    }
+    return user;
+  }
 }
 module.exports = User;

@@ -1,9 +1,37 @@
 const Pet = require("./models/Pet");
 const PetDAO = require("./dao/PetDAO");
 
+const Pet = require("./models/User");
+const PetDAO = require("./dao/UserDAO");
+
 const faker = require("faker");
+
+adopetmeAdmins = [
+  {
+    email: "ander@adopet.me",
+    nome: "Anderson",
+  },
+  {
+    email: "mathaus@adopet.me",
+    nome: "Mathaus",
+  },
+  {
+    email: "fred@adopet.me",
+    nome: "Frederico",
+  },
+  {
+    email: "pedrao@adopet.me",
+    nome: "Pedro",
+  },
+  {
+    email: "vitor@adopet.me",
+    nome: "Vitor",
+  },
+];
+
 faker.locale = "pt_BR";
 let petDAO = new PetDAO();
+let userDAO = new UserDAO();
 (async () => {
   //MIGRATION
   await petDAO.create();
@@ -13,5 +41,32 @@ let petDAO = new PetDAO();
     petDAO.insert(
       new Pet(Math.random > 0.5 ? faker.animal.dog() : faker.animal.cat())
     );
+  }
+
+  //MIGRATION
+  await userDAO.create();
+
+  //SEEDING
+  for (adpetmeAdmin of adopetmeAdmins) {
+    let user = User.fromJSON({
+      firstName: adpetmeAdmin.nome,
+      lastName: faker.name.lastName(),
+      birthdayDate: faker.date.past(30),
+      phone: faker.phone.phoneNumber(),
+      email: adpetmeAdmin.email,
+      isAdmin: true,
+      createdAt: new Date(),
+      isOnline: false,
+      registerConfirmed: "true",
+      document: "0000000000",
+      address: faker.address.streetName(),
+      number: faker.datatype.number(),
+      complement: faker.address.secondaryAddress(),
+      neighborhood: faker.address.streetSuffix(),
+      city: faker.address.city(),
+      zipcode: faker.address.zipCode(),
+    });
+    user.password = adpetmeAdmin.nome.toLowerCase() + "123";
+    userDAO.insert(user);
   }
 })();
