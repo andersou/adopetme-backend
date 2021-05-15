@@ -1,4 +1,5 @@
 const { check, validationResult } = require("express-validator");
+const UserDAO = require("../dao/UserDAO");
 
 function validationMiddleware(req, res, next) {
   const errors = validationResult(req);
@@ -8,7 +9,17 @@ function validationMiddleware(req, res, next) {
 }
 
 const registerValidation = [
-  check("email").isEmail().withMessage("Não é um email válido"),
+  check("email")
+    .isEmail()
+    .withMessage("Não é um email válido")
+    .custom((value) => {
+      let userDAO = new UserDAO();
+      return userDAO.findByEmail(value).then((users) => {
+        if (users.length > 0) {
+          return Promise.reject("E-mail em uso");
+        }
+      });
+    }),
   check("firstName")
     .isLength({ min: 3, max: 255 })
     .withMessage("Mínimo 3 caracteres"),
