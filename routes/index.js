@@ -5,7 +5,6 @@ const UserDAO = require("../dao/UserDAO");
 const authHelper = require("../helpers/auth");
 
 const router = express.Router();
-const SECRET = "adopetme";
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -23,7 +22,7 @@ router.post("/login", async (req, res) => {
   if (users.length > 0) {
     let user = users[0];
     if (await user.isPasswordValid(req.body.password)) {
-      const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: 300 });
+      const token = auth.signToken(user);
       return res.json({ auth: true, token });
     } else {
       res.status(401).end();
