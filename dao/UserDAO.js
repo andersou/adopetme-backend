@@ -5,7 +5,7 @@ class UserDAO {
   async create() {
     let db = await database.open();
     await db.run(
-      "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName VARCHAR(255) NOT NULL ,lastName VARCHAR(255) NOT NULL , phone VARCHAR(24),birthdayDate DATE,email VARCHAR(255) NOT NULL UNIQUE ,isAdmin BOOLEAN DEFAULT FALSE,password VARCHAR(60)  NOT NULL ,createdAt DATETIME,isOnline BOOLEAN,photoUri VARCHAR(255),facebookProfile VARCHAR(255),registerConfirmed BOOLEAN DEFAULT FALSE,document VARCHAR(16)  NOT NULL ,address VARCHAR(255),number INTEGER,complement VARCHAR(64),neighborhood VARCHAR(64),city VARCHAR(64),zipcode INTEGER)"
+      "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName VARCHAR(255) NOT NULL ,lastName VARCHAR(255) NOT NULL , phone VARCHAR(24),birthdayDate DATE,email VARCHAR(255) NOT NULL UNIQUE ,isAdmin BOOLEAN DEFAULT FALSE,password VARCHAR(60)  NOT NULL ,createdAt DATETIME,isOnline BOOLEAN,photoUri VARCHAR(255),facebookProfile VARCHAR(255),registerConfirmed BOOLEAN DEFAULT FALSE,document VARCHAR(16)  NOT NULL ,address VARCHAR(255),number INTEGER,complement VARCHAR(64),neighborhood VARCHAR(64),city VARCHAR(64),zipcode INTEGER,sex CHARACTER)"
     );
   }
   async fetch() {
@@ -37,7 +37,7 @@ class UserDAO {
   async insert(user) {
     let db = await database.open();
     return await db.run(
-      "INSERT INTO  users  ( firstName ,lastName , phone,birthdayDate ,email,isAdmin ,password ,createdAt ,isOnline ,photoUri ,facebookProfile ,registerConfirmed,document ,address ,number ,complement ,neighborhood ,city ,zipcode ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+      "INSERT INTO  users  ( firstName ,lastName , phone,birthdayDate ,email,isAdmin ,password ,createdAt ,isOnline ,photoUri ,facebookProfile ,registerConfirmed,document ,address ,number ,complement ,neighborhood ,city ,zipcode, sex ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
       user.firstName,
       user.lastName,
       user.phone,
@@ -56,7 +56,8 @@ class UserDAO {
       user.complement,
       user.neighborhood,
       user.city,
-      user.zipcode
+      user.zipcode,
+      user.sex
     );
   }
 }

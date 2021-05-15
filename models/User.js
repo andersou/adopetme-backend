@@ -1,12 +1,14 @@
 const bcrypt = require("bcrypt");
-
-class User {
+const BaseModel = require("./BaseModel");
+class User extends BaseModel {
   constructor() {
+    super();
     this.firstName = "";
     this.lastName = "";
     this._birthdayDate = new Date();
     this.phone = "";
     this.email = "";
+    this.sex = "N";
 
     this.isAdmin = true;
     this._password = "";
@@ -53,21 +55,8 @@ class User {
     return bcrypt.compare(password, this._password);
   }
 
-  static fromJSON(json) {
-    const bypassProperties = ["_password"];
-    let user = new User();
-    for (let prop in user) {
-      if (prop.startsWith("_")) {
-        //propriedades privadas
-        if (bypassProperties.includes(prop)) {
-          user[prop] = json[prop.substring(1)];
-        } else {
-          let propName = prop.substring(1);
-          user[propName] = json[propName];
-        }
-      } else user[prop] = json[prop];
-    }
-    return user;
+  static bypassJsonProperties() {
+    return ["_password"];
   }
 }
 module.exports = User;
