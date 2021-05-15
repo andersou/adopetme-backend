@@ -47,7 +47,7 @@ class UserDAO {
       user.password,
       user.createdAt,
       user.isOnline,
-      user.photoURI,
+      user.photoUri,
       user.facebookProfile,
       user.registerConfirmed,
       user.document,
