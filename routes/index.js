@@ -1,7 +1,8 @@
 var express = require('express');
 var http = require('http');
-var router = express.Router();
 var jwt = require('jsonwebtoken');
+
+var router = express.Router();
 var SECRET = 'adopetme';
 
 /* GET home page. */
