@@ -19,9 +19,9 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-router.get("/clientes", authHelper.authMiddleware, (req, res) => {
-  res.json([{ id: 1, nome: "mathaus" }]);
-});
+// router.get("/clientes", authHelper.authMiddleware, (req, res) => {
+//   res.json([{ id: 1, nome: "mathaus" }]);
+// });
 
 router.post("/login", async (req, res) => {
   try {
