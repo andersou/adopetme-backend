@@ -54,7 +54,7 @@ router.post(
     try {
       let user = User.fromJSON(req.body);
       user.password = req.body.password; // fazer o hash
-      user.photoUri = req.file.filename;
+      if (req.file) user.photoUri = req.file.filename;
       result = await userDAO.insert(user);
       res.json({ success: true, userId: result.lastID }).end();
     } catch (error) {
