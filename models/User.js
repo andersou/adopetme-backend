@@ -24,6 +24,7 @@ class User extends BaseModel {
     this.complement = "";
     this.neighborhood = "";
     this.city = "";
+    this.state = "";
     this.zipcode = "";
   }
 
