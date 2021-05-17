@@ -29,9 +29,9 @@ const registerValidation = [
   check("birthdayDate").isDate().toDate(), // formato padrao YYYY/MM/DD
   check("password")
     .isLength({ min: 8, max: 60 })
-    .withMessage("Mínimo de 8 caracteres")
-    .isStrongPassword()
-    .withMessage("Senha fraca"),
+    .withMessage("Mínimo de 8 caracteres"),
+  // .isStrongPassword()
+  // .withMessage("Senha fraca"),
   check("document")
     .isLength({ min: 11, max: 11 })
     .withMessage("Documento inválido"),
