@@ -3,6 +3,7 @@ const BaseModel = require("./BaseModel");
 class User extends BaseModel {
   constructor() {
     super();
+    this.id = null;
     this.firstName = "";
     this.lastName = "";
     this._birthdayDate = new Date();

@@ -2,6 +2,7 @@ const express = require("express");
 const UserDAO = require("../dao/UserDAO");
 const User = require("../models/User");
 const authHelper = require("../helpers/auth");
+const mailerHelper = require("../helpers/mailer");
 const validationHelper = require("../helpers/validation");
 const multer = require("multer");
 
@@ -52,11 +53,17 @@ router.post(
   async (req, res) => {
     let userDAO = new UserDAO();
     try {
-      let user = User.fromJSON(req.body);
-      user.password = req.body.password; // fazer o hash
+      let userData = User.fromJSON(req.body);
+      userData.password = req.body.password; // fazer o hash
       if (req.file) user.photoUri = req.file.filename;
-      result = await userDAO.insert(user);
-      res.json({ success: true, userId: result.lastID }).end();
+      result = await userDAO.insert(userData);
+
+      let user = (await userDAO.findById(result.lastID))[0];
+
+      //token de verificação de email
+      console.log(user);
+      await mailerHelper.sendConfirmEmail(user);
+      res.json({ success: true, userId: user.id }).end();
     } catch (error) {
       console.log(error);
       res.status(401).end();
@@ -68,5 +75,18 @@ router.post("/logout", authHelper.authMiddleware, function (req, res) {
   authHelper.putOnBlacklist(req.headers["x-access-token"]);
   res.end();
 });
+
+router.get(
+  "/confirm-email/:token",
+  authHelper.authEmailMiddleware,
+  async function (req, res) {
+    let userDAO = new UserDAO();
+    console.log(req.userId);
+    let user = (await userDAO.findById(req.userId))[0];
+    console.log(user);
+    await userDAO.confirmEmail(user);
+    res.json(req.params).end();
+  }
+);
 
 module.exports = router;
