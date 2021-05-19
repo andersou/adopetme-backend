@@ -32,6 +32,9 @@ router.post("/login", async (req, res) => {
     if (users.length > 0) {
       let user = users[0];
       if (await user.isPasswordValid(req.body.password)) {
+        if (!user.registerConfirmed) {
+          return res.status(422).json({ err: "Favor, confirme seu email" });
+        }
         const token = authHelper.signToken(user);
         return res.json({ auth: true, token });
       } else {
@@ -61,7 +64,7 @@ router.post(
       let user = (await userDAO.findById(result.lastID))[0];
       //gera o token e manda por email
       await mailerHelper.sendConfirmEmail(user);
-      
+
       res.json({ success: true, userId: user.id }).end();
     } catch (error) {
       console.log(error);

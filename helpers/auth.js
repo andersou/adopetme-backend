@@ -15,6 +15,7 @@ function authMiddleware(req, res, next) {
 
     //guardando requisição p/ uso posterior
     req.userId = decoded.userId;
+   
     next();
   });
 }
