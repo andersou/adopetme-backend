@@ -57,7 +57,7 @@ let userDAO = new UserDAO();
       isAdmin: true,
       createdAt: new Date(),
       isOnline: false,
-      registerConfirmed: "true",
+      registerConfirmed: true,
       document: "0000000000",
       address: faker.address.streetName(),
       number: faker.datatype.number(),
