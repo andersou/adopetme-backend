@@ -9,4 +9,9 @@ router.get("/", async function (req, res, next) {
   res.json(pets);
 });
 
+router.post("/", async function (req, res, next) {
+ 
+}
+
+)
 module.exports = router;

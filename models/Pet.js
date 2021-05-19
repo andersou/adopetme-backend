@@ -14,15 +14,15 @@ const SIZE_NAMES = {
 class Pet {
   constructor() {
     this.id = 0;
-    this.protector_id = 0;
+    this.protectorId = 0;
     this.name = "";
-    this.birthday_date = new Date();
+    this.birthdayDate = new Date();
     this._size = 0;
     this._specie = 0;
-    this.simple_description = "";
-    this.detailed_description = "";
+    this.simpleDescription = "";
+    this.detailedDescription = "";
     this.sex = "N";
-    this.created_at = new Date();
+    this.createdAt = new Date();
   }
 
   get size() {

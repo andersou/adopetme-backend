@@ -4,7 +4,7 @@ class PetDAO {
   async create() {
     let db = await database.open();
     await db.run(
-      "CREATE TABLE pets (id INTEGER PRIMARY KEY AUTOINCREMENT, protector_id INTEGER, name VARCHAR(255), birthday_date DATE, size INTEGER, specie INTEGER, simple_description VARCHAR(255), detailed_description TEXT, sex CHARACTER, created_at DATETIME, FOREIGN KEY(protector_id) REFERENCES users(id)) "
+      "CREATE TABLE pets (id INTEGER PRIMARY KEY AUTOINCREMENT, protectorId INTEGER, name VARCHAR(255), birthdayDate DATE, size INTEGER, specie INTEGER, simpleDescription VARCHAR(255), detailedDescription TEXT, sex CHARACTER, createdAt DATETIME, FOREIGN KEY(protectorId) REFERENCES users(id)) "
     );
   }
   async fetch() {
@@ -21,16 +21,16 @@ class PetDAO {
   async insert(pet) {
     let db = await database.open();
     return await db.run(
-      "INSERT INTO pets ( protector_id , name , birthday_date, size, specie , simple_description, detailed_description, sex, created_at) VALUES (?,?,?,?,?,?,?,?,?);",
-      pet.protector_id,
+      "INSERT INTO pets ( protectorId , name , birthdayDate, size, specie , simpleDescription, detailedDescription, sex, createdAt) VALUES (?,?,?,?,?,?,?,?,?);",
+      pet.protectorId,
       pet.name,
-      pet.birthday_date,
+      pet.birthdayDate,
       pet._size,
       pet._specie,
-      pet.simple_description,
-      pet.detailed_description,
+      pet.simpleDescription,
+      pet.detailedDescription,
       pet.sex,
-      pet.created_at
+      pet.createdAt
     );
   }
 }
