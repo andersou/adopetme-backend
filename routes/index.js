@@ -59,10 +59,9 @@ router.post(
       result = await userDAO.insert(userData);
 
       let user = (await userDAO.findById(result.lastID))[0];
-
-      //token de verificação de email
-      console.log(user);
+      //gera o token e manda por email
       await mailerHelper.sendConfirmEmail(user);
+      
       res.json({ success: true, userId: user.id }).end();
     } catch (error) {
       console.log(error);
@@ -84,8 +83,15 @@ router.get(
     console.log(req.userId);
     let user = (await userDAO.findById(req.userId))[0];
     console.log(user);
-    await userDAO.confirmEmail(user);
-    res.json(req.params).end();
+    let { changes } = await userDAO.confirmEmail(user);
+    if (changes > 0) {
+      res.json({ msg: "Confirmado com sucesso" }).end();
+    } else {
+      res
+        .status(401)
+        .json({ err: "Você pode já ter confirmado esse email." })
+        .end();
+    }
   }
 );
 
