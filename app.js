@@ -1,4 +1,5 @@
 var express = require("express");
+var apiRouter = express.Router();
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -16,9 +17,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+apiRouter.use("/", indexRouter);
+apiRouter.use("/users", usersRouter);
+apiRouter.use("/pets", petsRouter);
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/pets", petsRouter);
+app.use("/api/v1", apiRouter);
 
 module.exports = app;

@@ -16,7 +16,7 @@ const router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+  res.json({ msg: "Welcome to adopetme api" }).end();
 });
 
 // router.get("/clientes", authHelper.authMiddleware, (req, res) => {
