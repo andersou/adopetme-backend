@@ -57,7 +57,7 @@ class User extends BaseModel {
     return bcrypt.compare(password, this._password);
   }
 
-  static bypassJsonProperties() {
+  static bypassSetJsonProperties() {
     return ["_password"];
   }
 }

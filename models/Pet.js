@@ -1,3 +1,5 @@
+const PetPhotoDAO = require("../dao/PetPhotoDAO");
+
 const SPECIES_NAMES = {
   0: "Other",
   1: "Dog",
@@ -23,6 +25,7 @@ class Pet {
     this.detailedDescription = "";
     this.sex = "N";
     this.createdAt = new Date();
+    this.petPhotos = [];
   }
 
   get size() {
@@ -51,6 +54,15 @@ class Pet {
         (key) => SPECIES_NAMES[key] === newSpecie
       );
     }
+  }
+
+  async loadPetPhotos() {
+    let petPhotoDAO = new PetPhotoDAO();
+    this.petPhotos = await petPhotoDAO.fetchPhotosFromPet(this);
+  }
+
+  static bypassJsonProperties() {
+    return ["petPhotos"];
   }
 }
 module.exports = Pet;
