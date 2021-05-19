@@ -34,16 +34,6 @@ let petDAO = new PetDAO();
 let userDAO = new UserDAO();
 (async () => {
   //MIGRATION
-  await petDAO.create();
-
-  //SEEDING
-  for (let i = 0; i < 50; i++) {
-    petDAO.insert(
-      new Pet(Math.random > 0.5 ? faker.animal.dog() : faker.animal.cat())
-    );
-  }
-
-  //MIGRATION
   await userDAO.create();
 
   //SEEDING
@@ -69,4 +59,14 @@ let userDAO = new UserDAO();
     user.password = adpetmeAdmin.nome.toLowerCase() + "123";
     userDAO.insert(user);
   }
+
+  //MIGRATION
+  await petDAO.create();
+
+  //SEEDING
+  // for (let i = 0; i < 50; i++) {
+  //   petDAO.insert(
+  //     new Pet(Math.random > 0.5 ? faker.animal.dog() : faker.animal.cat())
+  //   );
+  // }
 })();
