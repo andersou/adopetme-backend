@@ -35,6 +35,7 @@ const registerValidation = [
   check("document")
     .isLength({ min: 11, max: 11 })
     .withMessage("Documento inválido"),
+  check("sex").isIn(["M", "F", "N"]).withMessage("Valor não permitido"),
 
   check("phone")
     .optional()
@@ -65,11 +66,36 @@ const registerValidation = [
     .optional()
     .isLength({ max: 64 })
     .withMessage("Máximo 64 caracteres"),
+
   check("zipcode").optional().isPostalCode(["BR"]).withMessage("CEP inválido"),
+  validationMiddleware,
+];
+
+registerPetValidation = [
+  check("name")
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Mínimo 3 caracteres"),
+  check("birthdayDate").isDate().toDate(), // formato padrao YYYY/MM/DD
+  check("size")
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage("Fora do range permitido"),
+  check("specie")
+    .optional()
+    .isInt({ min: 0, max: 2 })
+    .withMessage("Fora do range permitido"),
+  check("simpleDescription")
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Mínimo 3 caracteres, máximo 255"),
+  check("detailedDescription")
+    .isLength({ min: 3, max: 2048 })
+    .withMessage("Mínimo 3 caracteres, máximo 2048"),
+  check("sex").isIn(["M", "F", "N"]).withMessage("Valor não permitido"),
   validationMiddleware,
 ];
 
 module.exports = {
   validationMiddleware,
   registerValidation,
+  registerPetValidation,
 };

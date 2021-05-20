@@ -1,6 +1,9 @@
 const Pet = require("./models/Pet");
 const PetDAO = require("./dao/PetDAO");
 
+const PetPhoto = require("./models/PetPhoto");
+const PetPhotoDAO = require("./dao/PetPhotoDAO");
+
 const User = require("./models/User");
 const UserDAO = require("./dao/UserDAO");
 
@@ -31,6 +34,7 @@ adopetmeAdmins = [
 
 faker.locale = "pt_BR";
 let petDAO = new PetDAO();
+let petPhotoDAO = new PetPhotoDAO();
 let userDAO = new UserDAO();
 (async () => {
   //MIGRATION
@@ -69,4 +73,7 @@ let userDAO = new UserDAO();
   //     new Pet(Math.random > 0.5 ? faker.animal.dog() : faker.animal.cat())
   //   );
   // }
+
+  //MIGRATION
+  await petPhotoDAO.create();
 })();

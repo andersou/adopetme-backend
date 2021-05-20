@@ -4,7 +4,7 @@ class PetPhotoDAO {
   async create() {
     let db = await database.open();
     await db.run(
-      "CREATE TABLE pet_photos (id INTEGER PRIMARY KEY AUTOINCREMENT, petId INTEGER, photoUri VARCHAR(255), createdAt DATETIME) "
+      "CREATE TABLE pet_photos (id INTEGER PRIMARY KEY AUTOINCREMENT, petId INTEGER, photoUri VARCHAR(255), createdAt DATETIME, FOREIGN KEY(petId) REFERENCES pets(id)) "
     );
   }
   async fetch() {
