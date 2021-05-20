@@ -3,7 +3,7 @@ const BaseModel = require("./BaseModel");
 const SPECIES_NAMES = {
   0: "Other",
   1: "Dog",
-  2: "Cat ",
+  2: "Cat",
 };
 
 const SIZE_NAMES = {
