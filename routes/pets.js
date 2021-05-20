@@ -67,6 +67,20 @@ router.delete(
   }
 );
 
+// router.post(
+//   "/:id/photo",
+//   authHelper.authMiddleware,
+//   async function (req, res) {
+//     let petDAO = new PetDAO();
+//     let petPhotoDAO = new PetPhotoDAO();
+//     let photo = (await petPhotoDAO.findById(req.params.id))[0];
+//     let pet = (await petDAO.findById(photo.petId))[0];
+//     if (pet.protectorId == req.userId) {
+//       petPhotoDAO.removePhoto(req.params.id);
+//     }
+//   }
+// );
+
 router.delete("/:id", authHelper.authMiddleware, async function (req, res) {
   let petDAO = new PetDAO();
   let petPhotoDAO = new PetPhotoDAO();
