@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const paginate = require("express-paginate");
 const multer = require("multer");
 const PetDAO = require("../dao/PetDAO");
 const Pet = require("../models/Pet");
@@ -16,7 +15,7 @@ const upload = multer({
   },
 });
 /* GET pets listing. */
-router.get("/", paginate.middleware(10, 50), async function (req, res, next) {
+router.get("/", async function (req, res, next) {
   let petDAO = new PetDAO();
   pets = await petDAO.fetchPaginated(req.query.limit, req.skip);
   res.json(pets);
