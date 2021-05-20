@@ -18,13 +18,13 @@ class Pet {
     this.id = 0;
     this.protectorId = 0;
     this.name = "";
-    this.birthdayDate = new Date();
+    this._birthdayDate = new Date();
     this._size = 0;
     this._specie = 0;
     this.simpleDescription = "";
     this.detailedDescription = "";
     this.sex = "N";
-    this.createdAt = new Date();
+    this._createdAt = new Date();
     this.petPhotos = [];
   }
 
@@ -59,6 +59,15 @@ class Pet {
   async loadPetPhotos() {
     let petPhotoDAO = new PetPhotoDAO();
     this.petPhotos = await petPhotoDAO.fetchPhotosFromPet(this);
+  }
+  set birthdayDate(newBirthdayDate) {
+    this._birthdayDate =
+      newBirthdayDate instanceof Date
+        ? newBirthdayDate
+        : new Date(newBirthdayDate);
+  }
+  get birthdayDate() {
+    return this._birthdayDate;
   }
 
   static bypassJsonProperties() {

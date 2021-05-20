@@ -7,6 +7,9 @@ const PetPhotoDAO = require("./dao/PetPhotoDAO");
 const User = require("./models/User");
 const UserDAO = require("./dao/UserDAO");
 
+const Adoption = require("./models/Adoption");
+const AdoptionDAO = require("./dao/AdoptionDAO");
+
 const faker = require("faker");
 
 adopetmeAdmins = [
@@ -36,6 +39,7 @@ faker.locale = "pt_BR";
 let petDAO = new PetDAO();
 let petPhotoDAO = new PetPhotoDAO();
 let userDAO = new UserDAO();
+let adoptionDAO = new AdoptionDAO();
 (async () => {
   //MIGRATION
   await userDAO.create();
@@ -76,4 +80,7 @@ let userDAO = new UserDAO();
 
   //MIGRATION
   await petPhotoDAO.create();
+
+  //MIGRATION
+  await adoptionDAO.create();
 })();

@@ -4,7 +4,15 @@ class BaseModel {
       throw new TypeError("Cannot construct instances directly");
     }
   }
+  set createdAt(newCreatedAt) {
+    this._createdAt =
+      newCreatedAt instanceof Date ? newCreatedAt : new Date(newCreatedAt);
+  }
+  get createdAt() {
+    return this._createdAt;
+  }
 
+  
   // propriedades especiais que não podem ser chamadas diretamentes e sim pela propriedade privada
   static bypassSetJsonProperties() {
     return [];

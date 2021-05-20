@@ -36,14 +36,6 @@ class User extends BaseModel {
     return this._password;
   }
 
-  set createdAt(newCreatedAt) {
-    this._createdAt =
-      newCreatedAt instanceof Date ? newCreatedAt : new Date(newCreatedAt);
-  }
-  get createdAt() {
-    return this._createdAt;
-  }
-
   set birthdayDate(newBirthdayDate) {
     this._birthdayDate =
       newBirthdayDate instanceof Date
