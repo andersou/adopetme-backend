@@ -19,15 +19,39 @@ class AdoptionDAO {
     return petsPhotos;
   }
 
-  async fetchAdoptionsFromAdopter(user, isCancelled, isApproved) {
+  async fetchAdoptionsFromAdopter(
+    user,
+    isCancelled = false,
+    isApproved = false
+  ) {
     // executa SQL
     let db = await database.open();
     let adoptions = [];
     await db.each(
       `SELECT * FROM adoptions WHERE adopterId = ? ${
-        isCancelled ? "AND cancelledAt = NULL" : ""
-      } ${isApproved ? "AND approvedAt = NULL" : ""}`,
-      pet.id,
+        isCancelled ? "AND cancelledAt = NULL" : "AND cancelledAt != NULL"
+      } ${isApproved ? "AND approvedAt = NULL" : "AND approvedAt != NULL"}`,
+      user.id,
+      (err, adoptionRow) => {
+        if (!err) adoptions.push(Adoption.fromJSON(adoptionRow));
+      }
+    );
+
+    return adoptions;
+  }
+  async fetchAdoptionsFromProtector(
+    user,
+    isCancelled = false,
+    isApproved = false
+  ) {
+    // executa SQL
+    let db = await database.open();
+    let adoptions = [];
+    await db.each(
+      `SELECT * FROM adoptions WHERE petId IN (SELECT id FROM pets WHERE protectorId = ?) ${
+        isCancelled ? "AND cancelledAt = NULL" : "AND cancelledAt != NULL"
+      } ${isApproved ? "AND approvedAt = NULL" : "AND approvedAt != NULL"}`,
+      user.id,
       (err, adoptionRow) => {
         if (!err) adoptions.push(Adoption.fromJSON(adoptionRow));
       }
@@ -36,6 +60,10 @@ class AdoptionDAO {
     return adoptions;
   }
 
+  async fetchAdoptionRequestProtector(user) {
+    return fetchAdoptionsFromProtector(user, false, false);
+  }
+  
   async insert(adoption) {
     let db = await database.open();
     return await db.run(
