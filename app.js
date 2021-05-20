@@ -1,4 +1,5 @@
 var express = require("express");
+require("express-async-errors");
 var apiRouter = express.Router();
 var path = require("path");
 var cookieParser = require("cookie-parser");

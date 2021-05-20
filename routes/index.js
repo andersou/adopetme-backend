@@ -7,7 +7,7 @@ const validationHelper = require("../helpers/validation");
 const multer = require("multer");
 
 const upload = multer({
-  dest: "public/images",
+  dest: "public/images/users",
   limits: {
     fileSize: 1024 * 1024,
   },
