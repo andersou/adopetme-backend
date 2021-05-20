@@ -15,11 +15,29 @@ const upload = multer({
   },
 });
 /* GET pets listing. */
-router.get("/", async function (req, res, next) {
-  let petDAO = new PetDAO();
-  pets = await petDAO.fetchPaginated(req.query.limit, req.skip);
-  res.json(pets);
-});
+router.get(
+  "/",
+  function (req, res, next) {
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    let skipIndex = 0;
+    if (page > 0) skipIndex = (page - 1) * limit;
+    req.pagination = {
+      page,
+      limit,
+      skipIndex,
+    };
+    next();
+  },
+  async function (req, res, next) {
+    let petDAO = new PetDAO();
+    pets = await petDAO.fetchPaginated(
+      req.pagination.skipIndex,
+      req.pagination.limit
+    );
+    res.json(pets);
+  }
+);
 
 // multer multiplos
 // validacao

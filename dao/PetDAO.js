@@ -17,7 +17,16 @@ class PetDAO {
 
     return pets;
   }
+  async fetchPaginated(skip, limit = 10) {
+    // executa SQL
+    let db = await database.open();
+    let pets = [];
+    await db.each("SELECT * FROM pets LIMIT ? OFFSET ?", limit, skip, (err, petRow) => {
+      if (!err) pets.push(Pet.fromJSON(petRow));
+    });
 
+    return pets;
+  }
   async findById(id) {
     // executa SQL
     let db = await database.open();
