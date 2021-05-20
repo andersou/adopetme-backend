@@ -17,6 +17,17 @@ class PetPhotoDAO {
 
     return petsPhotos;
   }
+
+  async findById(id) {
+    // executa SQL
+    let db = await database.open();
+    let petsPhotos = [];
+    await db.each("SELECT * FROM pet_photos WHERE id = ?", id, (err, petRow) => {
+      if (!err) petsPhotos.push(PetPhoto.fromJSON(petRow));
+    });
+
+    return petsPhotos;
+  }
   async fetchPhotosFromPet(pet) {
     // executa SQL
     let db = await database.open();
@@ -35,6 +46,11 @@ class PetPhotoDAO {
     let db = await database.open();
     if (pet.id)
       return await db.run("DELETE FROM pet_photos WHERE petId = ? ", pet.id);
+  }
+
+  async removePhoto(id) {
+    let db = await database.open();
+    if (id) return await db.run("DELETE FROM pet_photos WHERE id = ? ", id);
   }
 
   async insert(petPhoto) {
