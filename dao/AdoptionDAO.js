@@ -1,5 +1,6 @@
 const database = require("./database");
 const PetPhoto = require("../models/PetPhoto");
+const Adoption = require("../models/Adoption");
 class AdoptionDAO {
   async create() {
     let db = await database.open();
@@ -17,33 +18,35 @@ class AdoptionDAO {
 
     return petsPhotos;
   }
-  async fetchPhotosFromPet(pet) {
+
+  async fetchAdoptionsFromAdopter(user, isCancelled, isApproved) {
     // executa SQL
     let db = await database.open();
-    let petsPhotos = [];
+    let adoptions = [];
     await db.each(
-      "SELECT * FROM adoptions WHERE petId = ?",
+      `SELECT * FROM adoptions WHERE adopterId = ? ${
+        isCancelled ? "AND cancelledAt = NULL" : ""
+      } ${isApproved ? "AND approvedAt = NULL" : ""}`,
       pet.id,
-      (err, petRow) => {
-        if (!err) petsPhotos.push(PetPhoto.fromJSON(petRow));
+      (err, adoptionRow) => {
+        if (!err) adoptions.push(Adoption.fromJSON(adoptionRow));
       }
     );
 
-    return petsPhotos;
-  }
-  async removePhotosFromPet(pet) {
-    let db = await database.open();
-    if (pet.id)
-      return await db.run("DELETE FROM adoptions WHERE petId = ? ", pet.id);
+    return adoptions;
   }
 
-  async insert(petPhoto) {
+  async insert(adoption) {
     let db = await database.open();
     return await db.run(
-      "INSERT INTO adoptions ( petId , photoUri, createdAt) VALUES (?,?,?);",
-      petPhoto.petId,
-      petPhoto.photoUri,
-      petPhoto.createdAt
+      "INSERT INTO adoptions ( petId , adopterId , createdAt , cancelledAt , approvedAt , message , feedback) VALUES (?,?,?,?,?,?,?);",
+      adoption.petId,
+      adoption.adopterId,
+      adoption.createdAt,
+      adoption.cancelledAt,
+      adoption.approvedAt,
+      adoption.message,
+      adoption.feedback
     );
   }
 }
