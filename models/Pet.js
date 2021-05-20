@@ -1,5 +1,5 @@
 const PetPhotoDAO = require("../dao/PetPhotoDAO");
-
+const BaseModel = require("./BaseModel");
 const SPECIES_NAMES = {
   0: "Other",
   1: "Dog",
@@ -13,8 +13,9 @@ const SIZE_NAMES = {
   3: "Large",
   4: "Extra Large",
 };
-class Pet {
+class Pet extends BaseModel {
   constructor() {
+    super();
     this.id = 0;
     this.protectorId = 0;
     this.name = "";
@@ -74,4 +75,7 @@ class Pet {
     return ["petPhotos"];
   }
 }
+Pet.SIZE_NAMES = SIZE_NAMES;
+Pet.SPECIES_NAMES = SPECIES_NAMES;
+
 module.exports = Pet;
