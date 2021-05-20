@@ -115,8 +115,8 @@ let adoptionDAO = new AdoptionDAO();
           birthdayDate: faker.date.past(5),
           size: faker.helpers.randomize([0, 1, 2, 3, 4]),
           specie: animal,
-          simpleDescription: faker.lorem.paragraph(),
-          detailedDescription: faker.lorem.text(3),
+          simpleDescription: faker.lorem.sentence(),
+          detailedDescription: faker.lorem.paragraphs(3),
           sex: animalSex,
           createdAt: new Date(),
         })
