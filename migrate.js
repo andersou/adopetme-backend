@@ -66,6 +66,7 @@ let adoptionDAO = new AdoptionDAO();
       neighborhood: faker.address.streetSuffix(),
       city: faker.address.city(),
       zipcode: faker.address.zipCode(),
+      photoUri: faker.image.avatar(),
     });
     user.password = adpetmeAdmin.nome.toLowerCase() + "123";
     userDAO.insert(user);
