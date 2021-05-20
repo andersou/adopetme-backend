@@ -5,6 +5,7 @@ const PetDAO = require("../dao/PetDAO");
 const Pet = require("../models/Pet");
 const PetPhoto = require("../models/PetPhoto");
 const validationHelper = require("../helpers/validation");
+const authHelper = require("../helpers/auth");
 const PetPhotoDAO = require("../dao/PetPhotoDAO");
 
 const upload = multer({
@@ -24,6 +25,7 @@ router.get("/", async function (req, res, next) {
 // validacao
 router.post(
   "/",
+  authHelper.authMiddleware,
   upload.array("photos", 6),
   validationHelper.registerPetValidation,
   async function (req, res, next) {
@@ -31,6 +33,8 @@ router.post(
     let petPhotoDAO = new PetPhotoDAO();
     try {
       let petData = Pet.fromJSON(req.body);
+      petData.protectorId = req.userId;
+
       let { lastID } = await petDAO.insert(petData);
 
       if (req.files) {
@@ -49,4 +53,21 @@ router.post(
     }
   }
 );
+
+router.delete("/:id", authHelper.authMiddleware, async function (req, res) {
+  let petDAO = new PetDAO();
+  let petPhotoDAO = new PetPhotoDAO();
+  let petId = req.params.id;
+  try {
+    let pet = (await petDAO.findById(petId))[0];
+    if (pet) {
+      petDAO.removePet(pet);
+      petPhotoDAO.removePhotosFromPet(pet);
+    }
+    res.json({ success: true }).end();
+  } catch (error) {
+    console.log(error);
+    res.status(401).end();
+  }
+});
 module.exports = router;
