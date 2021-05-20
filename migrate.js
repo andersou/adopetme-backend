@@ -13,6 +13,8 @@ const AdoptionDAO = require("./dao/AdoptionDAO");
 const faker = require("faker");
 const fetch = require("node-fetch");
 
+const nomesAnimais = require("./migrate_nomes");
+
 adopetmeAdmins = [
   {
     email: "ander@adopet.me",
@@ -105,16 +107,17 @@ let adoptionDAO = new AdoptionDAO();
     for (let j = 0; j < 10; j++) {
       console.log(`Alimentando usuário ${i} com animal para adoção ${j}`);
       let animal = faker.helpers.randomize(["Cat", "Dog"]);
+      let animalSex = faker.helpers.randomize(["M", "F"]);
       let resultPet = await petDAO.insert(
         Pet.fromJSON({
           protectorId: userId,
-          name: animal == "Cat" ? faker.animal.cat() : faker.animal.dog(),
+          name: faker.helpers.randomize(nomesAnimais[animalSex]),
           birthdayDate: faker.date.past(5),
           size: faker.helpers.randomize([0, 1, 2, 3, 4]),
           specie: animal,
           simpleDescription: faker.lorem.paragraph(),
           detailedDescription: faker.lorem.text(3),
-          sex: faker.helpers.randomize(["M", "F"]),
+          sex: animalSex,
           createdAt: new Date(),
         })
       );
