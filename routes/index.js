@@ -28,17 +28,18 @@ router.post("/login", async (req, res) => {
   try {
     //Dados viriam do banco de dados, engessei para teste
     let userDAO = new UserDAO();
-    let user = await userDAO.findByEmail(req.body.email);
-    if (user.id > 0) {
-      if (await user.isPasswordValid(req.body.password)) {
-        if (!user.registerConfirmed) {
-          return res.status(422).json({ err: "Favor, confirme seu email" });
-        }
-        const token = authHelper.signToken(user);
-        return res.json({ auth: true, token });
-      } else {
-        res.status(401).end();
+    let user = null;
+    try {
+      user = await userDAO.findByEmail(req.body.email);
+    } catch (error) {
+      return res.status(401).end();
+    }
+    if (await user.isPasswordValid(req.body.password)) {
+      if (!user.registerConfirmed) {
+        return res.status(422).json({ err: "Favor, confirme seu email" });
       }
+      const token = authHelper.signToken(user);
+      return res.json({ auth: true, token });
     } else {
       res.status(401).end();
     }

@@ -14,11 +14,10 @@ const registerValidation = [
     .withMessage("Não é um email válido")
     .custom((value) => {
       let userDAO = new UserDAO();
-      return userDAO.findByEmail(value).then((user) => {
-        if (user.id > 0) {
-          return Promise.reject("E-mail em uso");
-        }
-      });
+      return userDAO
+        .findByEmail(value)
+        .then((user) => Promise.reject("E-mail em uso"))
+        .catch(() => Promise.resolve());
     }),
   check("firstName")
     .isLength({ min: 3, max: 255 })
