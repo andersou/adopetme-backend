@@ -31,11 +31,19 @@ router.get(
   },
   async function (req, res, next) {
     let petDAO = new PetDAO();
-    pets = await petDAO.fetchPaginated(
+    let pets = await petDAO.fetchPaginated(
       req.pagination.skipIndex,
       req.pagination.limit
     );
-    res.json(pets);
+    for (let pet of pets) await pet.loadPetPhotos();
+    let count = await petDAO.countPets();
+    let pageCount = Math.ceil(count / req.pagination.limit);
+    res.json({
+      pageCount,
+      actualPage: req.pagination.page,
+      consts: { species: Pet.SPECIES_NAMES, sizes: Pet.SIZE_NAMES },
+      data: pets,
+    });
   }
 );
 

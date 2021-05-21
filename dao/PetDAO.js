@@ -21,9 +21,14 @@ class PetDAO {
     // executa SQL
     let db = await database.open();
     let pets = [];
-    await db.each("SELECT * FROM pets LIMIT ? OFFSET ?", limit, skip, (err, petRow) => {
-      if (!err) pets.push(Pet.fromJSON(petRow));
-    });
+    await db.each(
+      "SELECT * FROM pets LIMIT ? OFFSET ?",
+      limit,
+      skip,
+      (err, petRow) => {
+        if (!err) pets.push(Pet.fromJSON(petRow));
+      }
+    );
 
     return pets;
   }
@@ -36,6 +41,12 @@ class PetDAO {
     });
 
     return pets;
+  }
+
+  async countPets() {
+    // executa SQL
+    let db = await database.open();
+    return (await db.get("SELECT COUNT(id) as counter FROM pets")).counter;
   }
 
   async removePet(pet) {
