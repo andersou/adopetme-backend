@@ -79,9 +79,9 @@ class AdoptionDAO {
   async fetchAdopterAdoptionRequest(user, pet) {
     let db = await database.open();
     return await db.get(
-      "SELECT FROM adoptions WHERE petId = ? AND adopterId = ?",
-      user.id,
-      pet.id
+      "SELECT id FROM adoptions WHERE petId = ? AND adopterId = ?",
+      pet.id,
+      user.id
     );
   }
   async insert(adoption) {

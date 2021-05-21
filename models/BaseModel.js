@@ -5,14 +5,14 @@ class BaseModel {
     }
   }
   set createdAt(newCreatedAt) {
-    this._createdAt =
-      newCreatedAt instanceof Date ? newCreatedAt : new Date(newCreatedAt);
+    if (newCreatedAt)
+      this._createdAt =
+        newCreatedAt instanceof Date ? newCreatedAt : new Date(newCreatedAt);
   }
   get createdAt() {
     return this._createdAt;
   }
 
-  
   // propriedades especiais que não podem ser chamadas diretamentes e sim pela propriedade privada
   static bypassSetJsonProperties() {
     return [];
