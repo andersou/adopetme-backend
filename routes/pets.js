@@ -21,7 +21,7 @@ router.get("/:id", async function (req, res) {
     pet = await petDAO.findById(req.params.id);
     await pet.loadPetPhotos();
   } catch (error) {
-    return res.status(404).end();
+    return res.status(444).end();
   }
   res.json(pet);
 });

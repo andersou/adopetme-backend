@@ -18,7 +18,19 @@ class AdoptionDAO {
 
     return petsPhotos;
   }
-
+  async fetchAllAdoptionsRequestsFromAdopter(user) {
+    // executa SQL
+    let db = await database.open();
+    let adoptions = [];
+    await db.each(
+      `SELECT * FROM adoptions WHERE adopterId = ? `,
+      user.id,
+      (err, adoptionRow) => {
+        if (!err) adoptions.push(Adoption.fromJSON(adoptionRow));
+      }
+    );
+    return adoptions;
+  }
   async fetchAdoptionsFromAdopter(
     user,
     isCancelled = false,
@@ -61,9 +73,9 @@ class AdoptionDAO {
   }
 
   async fetchAdoptionRequestProtector(user) {
-    return fetchAdoptionsFromProtector(user, false, false);
+    return this.fetchAdoptionsFromProtector(user, false, false);
   }
-  
+
   async insert(adoption) {
     let db = await database.open();
     return await db.run(

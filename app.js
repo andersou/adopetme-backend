@@ -10,6 +10,7 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var petsRouter = require("./routes/pets");
+var adoptionsRouter = require("./routes/adoptions");
 
 var app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 apiRouter.use("/", indexRouter);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/pets", petsRouter);
+apiRouter.use("/adoptions", adoptionsRouter);
 
 app.use("/api/v1", apiRouter);
 
