@@ -14,8 +14,8 @@ const registerValidation = [
     .withMessage("Não é um email válido")
     .custom((value) => {
       let userDAO = new UserDAO();
-      return userDAO.findByEmail(value).then((users) => {
-        if (users.length > 0) {
+      return userDAO.findByEmail(value).then((user) => {
+        if (user.id > 0) {
           return Promise.reject("E-mail em uso");
         }
       });

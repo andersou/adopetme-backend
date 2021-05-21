@@ -28,9 +28,8 @@ router.post("/login", async (req, res) => {
   try {
     //Dados viriam do banco de dados, engessei para teste
     let userDAO = new UserDAO();
-    let users = await userDAO.findByEmail(req.body.email);
-    if (users.length > 0) {
-      let user = users[0];
+    let user = await userDAO.findByEmail(req.body.email);
+    if (user.id > 0) {
       if (await user.isPasswordValid(req.body.password)) {
         if (!user.registerConfirmed) {
           return res.status(422).json({ err: "Favor, confirme seu email" });
@@ -61,7 +60,7 @@ router.post(
       if (req.file) user.photoUri = req.file.filename;
       result = await userDAO.insert(userData);
 
-      let user = (await userDAO.findById(result.lastID));
+      let user = await userDAO.findById(result.lastID);
       //gera o token e manda por email
       await mailerHelper.sendConfirmEmail(user);
 
@@ -84,7 +83,7 @@ router.get(
   async function (req, res) {
     let userDAO = new UserDAO();
     console.log(req.userId);
-    let user = (await userDAO.findById(req.userId));
+    let user = await userDAO.findById(req.userId);
     console.log(user);
     let { changes } = await userDAO.confirmEmail(user);
     if (changes > 0) {

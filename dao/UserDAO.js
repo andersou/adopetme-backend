@@ -22,16 +22,9 @@ class UserDAO {
   async findByEmail(email) {
     // executa SQL
     let db = await database.open();
-    let users = [];
-    await db.each(
-      "SELECT * FROM users WHERE email = ?",
-      email,
-      (err, userRow) => {
-        if (!err) users.push(User.fromJSON(userRow));
-      }
+    return User.fromJSON(
+      await db.get("SELECT * FROM users WHERE email = ?", email)
     );
-
-    return users;
   }
   async findById(id) {
     // executa SQL
