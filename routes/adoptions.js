@@ -19,16 +19,18 @@ router.post("/", async function (req, res) {
   let pet;
 
   if (!petId) {
-    return res.status(422).end();
+    return res.status(404).json({ msg: "É necessário informar petId" }).end();
   }
   pet = await petDao.findById(petId);
   //é o dono do pet?!
   if (pet.protectorId == req.user.id) {
-    return res.status(403).end();
+    return res.status(403).json({ msg: "Esse pet é seu!" }).end();
   }
-
+  if (await pet.isAdopted()) {
+    return res.status(422).json({ msg: "Esse pet já foi adotado" }).end();
+  }
   if (await adoptionDAO.fetchAdopterAdoptionRequest(req.user, pet)) {
-    return res.status(420).end();
+    return res.status(420).json({ msg: "Não seja insistente :)" }).end();
   }
 
   //cria a adoção
@@ -48,18 +50,51 @@ router.post("/", async function (req, res) {
   } else res.json({ success: false }).end();
 });
 
-router.post("/adoption/:id/approve", async function (req, res) {
-  let petId = req.params.petId;
-  let adopterId = req.params.id;
-  if (!petId) {
-    return res.status(422).end();
+router.post("/:id/approve", async function (req, res) {
+  let adoptionId = req.params.id;
+  let feedback = req.body.feedback;
+  console.log("oi");
+  let adoptionDAO = new AdoptionDAO();
+  let adoption = await adoptionDAO.findById(adoptionId);
+  //já foi aprovada :)
+  if (adoption.approvedAt) {
+    return res.status(403).end();
   }
-  //cancela as outras requisições que nao foram canceladas com feedback padrão
+
+  let pet = await adoption.pet();
+
+  //pet já adotado :(
+  if (await pet.isAdopted()) {
+    return res.status(422).json({ msg: "Esse pet já foi adotado" }).end();
+  }
+  //apenas o dono pode aprovar
+  if (pet.protectorId == req.user.id) {
+    //cancela as outras requisições que nao foram canceladas com feedback padrão
+    await adoptionDAO.updatePetAdoptions(
+      {
+        feedback: "Esse pet foi adotado por outra pessoa.",
+        cancelledAt: new Date(),
+      },
+      pet
+    );
+    //depois implementar email de aviso :)
+    adoption.approvedAt = new Date();
+    adoption.cancelledAt = null;
+    adoption.feedback = feedback;
+    await adoptionDAO.update(adoption);
+    res.json({ sucess: true });
+  } else {
+    res.status(422);
+  }
+
   //aprova essa
 });
-router.post("/adoption/:id/reject", async function (req, res) {
-  let petId = req.params.petId;
-  let adopterId = req.oarams.id;
+router.post("/:id/reject", async function (req, res) {
+  let adoptionId = req.params.id;
+  let feedback = req.body.feedback;
+  let adoptionDAO = new AdoptionDAO();
+  let adoption = await adoptionDAO.findById(adoptionId);
+
   if (!petId) {
     return res.status(422).end();
   }

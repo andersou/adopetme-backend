@@ -1,6 +1,7 @@
 const BaseModel = require("./BaseModel");
-const PetDAO = require("../dao/PetDAO");
 const UserDAO = require("../dao/UserDAO");
+const PetDAO = require("../dao/PetDAO");
+
 class Adoption extends BaseModel {
   constructor() {
     super();
@@ -16,6 +17,7 @@ class Adoption extends BaseModel {
   }
 
   async pet() {
+    console.log(PetDAO);
     let petDAO = new PetDAO();
     return await petDAO.findById(this.petId);
   }
