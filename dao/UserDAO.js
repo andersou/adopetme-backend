@@ -36,11 +36,7 @@ class UserDAO {
   async findById(id) {
     // executa SQL
     let db = await database.open();
-    let users = [];
-    await db.each("SELECT * FROM users WHERE id = ?", id, (err, userRow) => {
-      if (!err) users.push(User.fromJSON(userRow));
-    });
-    return users;
+    return await User.fromJSON(db.get("SELECT * FROM users WHERE id = ?", id));
   }
   async confirmEmail(user) {
     let db = await database.open();

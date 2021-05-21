@@ -61,7 +61,7 @@ router.post(
       if (req.file) user.photoUri = req.file.filename;
       result = await userDAO.insert(userData);
 
-      let user = (await userDAO.findById(result.lastID))[0];
+      let user = (await userDAO.findById(result.lastID));
       //gera o token e manda por email
       await mailerHelper.sendConfirmEmail(user);
 
@@ -84,7 +84,7 @@ router.get(
   async function (req, res) {
     let userDAO = new UserDAO();
     console.log(req.userId);
-    let user = (await userDAO.findById(req.userId))[0];
+    let user = (await userDAO.findById(req.userId));
     console.log(user);
     let { changes } = await userDAO.confirmEmail(user);
     if (changes > 0) {

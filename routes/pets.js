@@ -14,6 +14,10 @@ const upload = multer({
     fileSize: 1024 * 1024,
   },
 });
+router.get("/:id", async function (req, res) {
+  let pet = await petDAO.findById(req.params.id);
+  res.json(pet);
+});
 /* GET pets listing. */
 router.get(
   "/",
@@ -85,8 +89,8 @@ router.delete(
   async function (req, res) {
     let petDAO = new PetDAO();
     let petPhotoDAO = new PetPhotoDAO();
-    let photo = (await petPhotoDAO.findById(req.params.id))[0];
-    let pet = (await petDAO.findById(photo.petId))[0];
+    let photo = (await petPhotoDAO.findById(req.params.id));
+    let pet = (await petDAO.findById(photo.petId));
     if (pet.protectorId == req.userId) {
       petPhotoDAO.removePhoto(req.params.id);
     }
@@ -112,7 +116,7 @@ router.delete("/:id", authHelper.authMiddleware, async function (req, res) {
   let petPhotoDAO = new PetPhotoDAO();
   let petId = req.params.id;
   try {
-    let pet = (await petDAO.findById(petId))[0];
+    let pet = (await petDAO.findById(petId));
 
     if (pet.protectorId == req.userId) {
       petDAO.removePet(pet);

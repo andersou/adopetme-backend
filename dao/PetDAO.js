@@ -35,12 +35,7 @@ class PetDAO {
   async findById(id) {
     // executa SQL
     let db = await database.open();
-    let pets = [];
-    await db.each("SELECT * FROM pets WHERE id = ?", id, (err, petRow) => {
-      if (!err) pets.push(Pet.fromJSON(petRow));
-    });
-
-    return pets;
+    return Pet.fromJSON(await db.get("SELECT * FROM pets WHERE id = ?", id));
   }
 
   async countPets() {
