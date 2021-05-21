@@ -70,7 +70,7 @@ router.post(
     let petPhotoDAO = new PetPhotoDAO();
     try {
       let petData = Pet.fromJSON(req.body);
-      petData.protectorId = req.userId;
+      petData.protectorId = req.user.id;
 
       let { lastID } = await petDAO.insert(petData);
 
@@ -98,7 +98,7 @@ router.delete(
     let petPhotoDAO = new PetPhotoDAO();
     let photo = await petPhotoDAO.findById(req.params.id);
     let pet = await petDAO.findById(photo.petId);
-    if (pet.protectorId == req.userId) {
+    if (pet.protectorId == req.user.id) {
       petPhotoDAO.removePhoto(req.params.id);
     }
   }
@@ -125,7 +125,7 @@ router.delete("/:id", authHelper.authMiddleware, async function (req, res) {
   try {
     let pet = await petDAO.findById(petId);
 
-    if (pet.protectorId == req.userId) {
+    if (pet.protectorId == req.user.id) {
       petDAO.removePet(pet);
       petPhotoDAO.removePhotosFromPet(pet);
     }

@@ -76,6 +76,14 @@ class AdoptionDAO {
     return this.fetchAdoptionsFromProtector(user, false, false);
   }
 
+  async fetchAdopterAdoptionRequest(user, pet) {
+    let db = await database.open();
+    return await db.get(
+      "SELECT FROM adoptions WHERE petId = ? AND adopterId = ?",
+      user.id,
+      pet.id
+    );
+  }
   async insert(adoption) {
     let db = await database.open();
     return await db.run(

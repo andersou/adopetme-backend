@@ -4,14 +4,12 @@ const UserDAO = require("../dao/UserDAO");
 const authHelper = require("../helpers/auth");
 /* GET users listing. */
 router.get("/", authHelper.authMiddleware, async function (req, res, next) {
-  let userDAO = new UserDAO();
-  let user = await userDAO.findById(req.userId);
+  let user = req.user;
   res.json(user);
 });
 
 router.delete("/photo", authHelper.authMiddleware, async function (req, res) {
-  let userDAO = new UserDAO();
-  let user = (await userDAO.findById(req.userId));
+  let user = req.user;
   //delete photo aqui
 
   user.photoUri = "";

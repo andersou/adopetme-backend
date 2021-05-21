@@ -83,8 +83,7 @@ router.get(
   authHelper.authEmailMiddleware,
   async function (req, res) {
     let userDAO = new UserDAO();
-    console.log(req.userId);
-    let user = await userDAO.findById(req.userId);
+    let user = req.user;
     console.log(user);
     let { changes } = await userDAO.confirmEmail(user);
     if (changes > 0) {

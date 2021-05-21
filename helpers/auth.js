@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const UserDAO = require("../dao/UserDAO");
 let blacklist = [];
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -12,11 +13,12 @@ function authMiddleware(req, res, next) {
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     //erro nos casos de token ausente ou inválido
     if (err) return res.status(401).end();
-
+    let userDAO = new UserDAO();
     //guardando requisição p/ uso posterior
-    req.userId = decoded.userId;
-   
-    next();
+    userDAO.findById(decoded.userId).then((user) => {
+      req.user = user;
+      next();
+    });
   });
 }
 
