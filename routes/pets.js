@@ -19,6 +19,7 @@ router.get("/:id", async function (req, res) {
   let pet = null;
   try {
     pet = await petDAO.findById(req.params.id);
+    await pet.loadPetPhotos();
   } catch (error) {
     return res.status(404).end();
   }
