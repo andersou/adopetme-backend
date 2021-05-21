@@ -21,8 +21,8 @@ class PetPhotoDAO {
   async findById(id) {
     // executa SQL
     let db = await database.open();
-    return await PetPhoto.fromJSON(
-      db.get("SELECT * FROM pet_photos WHERE id = ?", id)
+    return PetPhoto.fromJSON(
+      await db.get("SELECT * FROM pet_photos WHERE id = ?", id)
     );
   }
   async fetchPhotosFromPet(pet) {
