@@ -34,7 +34,7 @@ router.post("/", async function (req, res) {
   }
 
   //cria a adoção
-  let { changes } = adoptionDAO.insert(
+  let { changes } = await adoptionDAO.insert(
     Adoption.fromJSON({
       petId,
       adopterId: req.user.id,
