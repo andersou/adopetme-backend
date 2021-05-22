@@ -89,14 +89,30 @@ router.post("/:id/approve", async function (req, res) {
 
   //aprova essa
 });
+//falta implementar
 router.post("/:id/reject", async function (req, res) {
   let adoptionId = req.params.id;
   let feedback = req.body.feedback;
   let adoptionDAO = new AdoptionDAO();
   let adoption = await adoptionDAO.findById(adoptionId);
 
-  if (!petId) {
-    return res.status(422).end();
+  if (adoption.rejectedAt) {
+    return res.status(403).json({ msg: "Já foi rejeitada" }).end();
+  }
+  let pet = await adoption.pet();
+  //nao precisa ver se ja foi adotado, pois quando alguem adota as outras sao rejeitadas e sairia
+  //no if de cima
+
+  //apenas o dono pode rejeitar
+  if (pet.protectorId == req.user.id) {
+    //depois implementar email de aviso :)
+    adoption.approvedAt = null;
+    adoption.cancelledAt = new Date();
+    adoption.feedback = feedback;
+    await adoptionDAO.update(adoption);
+    res.json({ sucess: true });
+  } else {
+    res.status(422);
   }
   //cancela esta requisição
 });
