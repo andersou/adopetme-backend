@@ -1,6 +1,5 @@
-const AdoptionDAO = require("../dao/AdoptionDAO");
-const PetPhotoDAO = require("../dao/PetPhotoDAO");
 const BaseModel = require("./BaseModel");
+const PetPhotoDAO = require("../dao/PetPhotoDAO");
 const SPECIES_NAMES = {
   0: "Other",
   1: "Dog",
@@ -63,10 +62,11 @@ class Pet extends BaseModel {
     this.petPhotos = await petPhotoDAO.fetchPhotosFromPet(this);
   }
 
-  async isAdopted() {
-    let adoptionDAO = new AdoptionDAO();
-    return !!(await adoptionDAO.fetchPetAdoptionApproved(this));
-  }
+  // async isAdopted() {
+  //   const AdoptionDAO = require("../dao/AdoptionDAO");
+  //   let adoptionDAO = new AdoptionDAO();
+  //   return !!(await adoptionDAO.fetchPetAdoptionApproved(this));
+  // }
   set birthdayDate(newBirthdayDate) {
     this._birthdayDate =
       newBirthdayDate instanceof Date

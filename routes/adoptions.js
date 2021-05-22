@@ -26,7 +26,7 @@ router.post("/", async function (req, res) {
   if (pet.protectorId == req.user.id) {
     return res.status(403).json({ msg: "Esse pet é seu!" }).end();
   }
-  if (await pet.isAdopted()) {
+  if (!!(await adoptionDAO.fetchPetAdoptionApproved(this))) {
     return res.status(422).json({ msg: "Esse pet já foi adotado" }).end();
   }
   if (await adoptionDAO.fetchAdopterAdoptionRequest(req.user, pet)) {
@@ -64,7 +64,7 @@ router.post("/:id/approve", async function (req, res) {
   let pet = await adoption.pet();
 
   //pet já adotado :(
-  if (await pet.isAdopted()) {
+  if (!!(await adoptionDAO.fetchPetAdoptionApproved(this))) {
     return res.status(422).json({ msg: "Esse pet já foi adotado" }).end();
   }
   //apenas o dono pode aprovar
