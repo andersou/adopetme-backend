@@ -12,12 +12,14 @@ const registerValidation = [
   check("email")
     .isEmail()
     .withMessage("Não é um email válido")
-    .custom((value) => {
+    .custom(async (value) => {
       let userDAO = new UserDAO();
-      return userDAO
-        .findByEmail(value)
-        .then((user) => Promise.reject("E-mail em uso"))
-        .catch(() => Promise.resolve());
+      console.log(userDAO);
+      let user = null;
+      try {
+        user = await userDAO.findByEmail(value);
+      } catch (error) {}
+      if (user) throw new Error("email em uso");
     }),
   check("firstName")
     .isLength({ min: 3, max: 255 })
