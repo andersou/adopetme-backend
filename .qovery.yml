@@ -3,10 +3,6 @@ application:
   name: "adopetme-backend"
   project: "adopetme"
   organization: "QoveryCommunity"
-  storage:
-    - name: "test"
-      size: "1"
-      type: "ssd"
 routers:
   - name: "main-adopetme-backend"
     routes:
