@@ -77,11 +77,9 @@ registerPetValidation = [
     .withMessage("Mínimo 3 caracteres"),
   check("birthdayDate").isDate().toDate(), // formato padrao YYYY/MM/DD
   check("size")
-    .optional()
     .isInt({ min: 0, max: 5 })
     .withMessage("Fora do range permitido"),
   check("specie")
-    .optional()
     .isInt({ min: 0, max: 2 })
     .withMessage("Fora do range permitido"),
   check("simpleDescription")
