@@ -14,7 +14,6 @@ const registerValidation = [
     .withMessage("Não é um email válido")
     .custom(async (value) => {
       let userDAO = new UserDAO();
-      console.log(userDAO);
       let user = null;
       try {
         user = await userDAO.findByEmail(value);
