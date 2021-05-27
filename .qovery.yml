@@ -14,4 +14,4 @@ routers:
       - application_name: "adopetme-backend"
         paths:
           - "/api/v1/*"
-          "/images/*"
+          -"/images/*"
