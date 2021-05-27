@@ -29,7 +29,7 @@ class RatingDAO {
   async insert(rating) {
     let db = await database.open();
     return await db.run(
-      "INSERT INTO pet_photos ( adoptionId, toId, fromId, score,ratedAs, createdAt) VALUES (?,?,?,?,?,?);",
+      "INSERT INTO ratings ( adoptionId, toId, fromId, score,ratedAs, createdAt) VALUES (?,?,?,?,?,?);",
       rating.adoptionId,
       rating.toId,
       rating.fromId,
