@@ -71,7 +71,7 @@ const registerValidation = [
   validationMiddleware,
 ];
 
-registerPetValidation = [
+const registerPetValidation = [
   check("name")
     .isLength({ min: 3, max: 255 })
     .withMessage("Mínimo 3 caracteres"),
@@ -92,8 +92,38 @@ registerPetValidation = [
   validationMiddleware,
 ];
 
+const findPetsValidation = [
+  check("sort")
+    .optional()
+    .isIn(["DESC", "ASC"])
+    .withMessage("Valor não permitido"),
+  check("filters[sex]")
+    .optional()
+    .isIn(["M", "F", "N"])
+    .withMessage("Valor não permitido"),
+  check("filters[size]")
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage("Fora do range permitido"),
+  check("filters[specie]")
+    .optional()
+    .isInt({ min: 0, max: 2 })
+    .withMessage("Fora do range permitido"),
+  check("limit")
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage("Fora do range permitido"),
+  check("page")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Fora do range permitido"),
+
+  validationMiddleware,
+];
+
 module.exports = {
   validationMiddleware,
   registerValidation,
   registerPetValidation,
+  findPetsValidation,
 };

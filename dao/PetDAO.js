@@ -17,18 +17,33 @@ class PetDAO {
 
     return pets;
   }
-  async fetchPaginated(skip, limit = 10) {
+  async fetchPaginated(
+    skip,
+    limit = 10,
+    filters = {},
+    sortByBirthdayDate = false
+  ) {
     // executa SQL
     let db = await database.open();
     let pets = [];
-    await db.each(
-      "SELECT * FROM pets LIMIT ? OFFSET ?",
-      limit,
-      skip,
-      (err, petRow) => {
-        if (!err) pets.push(Pet.fromJSON(petRow));
-      }
-    );
+
+    let filtersClauses = [];
+    for (let filter in filters) {
+      filtersClauses.push(` ${filter} = '${filters[filter]}' `);
+    }
+    let filtersSQL = `WHERE ${filtersClauses.join("AND")}`;
+
+    let orderSQL = "";
+    if (sortByBirthdayDate) {
+      orderSQL = ` ORDER BY birthdayDate ${sortByBirthdayDate}`;
+    }
+    let sql = `SELECT * FROM pets ${
+      filtersClauses.length > 0 ? filtersSQL : ""
+    }  ${orderSQL} LIMIT ? OFFSET ?`;
+    console.log(sql);
+    await db.each(sql, limit, skip, (err, petRow) => {
+      if (!err) pets.push(Pet.fromJSON(petRow));
+    });
 
     return pets;
   }

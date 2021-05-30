@@ -28,6 +28,7 @@ router.get("/:id", async function (req, res) {
 /* GET pets listing. */
 router.get(
   "/",
+  validationHelper.findPetsValidation,
   function (req, res, next) {
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
@@ -42,9 +43,12 @@ router.get(
   },
   async function (req, res, next) {
     let petDAO = new PetDAO();
+    console.log(req.query);
     let pets = await petDAO.fetchPaginated(
       req.pagination.skipIndex,
-      req.pagination.limit
+      req.pagination.limit,
+      req.query.filters,
+      req.query.sort
     );
     for (let pet of pets) await pet.loadPetPhotos();
     let count = await petDAO.countPets();
