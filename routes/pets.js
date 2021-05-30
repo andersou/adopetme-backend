@@ -51,6 +51,7 @@ router.get(
     let pageCount = Math.ceil(count / req.pagination.limit);
     res.json({
       pageCount,
+      itemsCount: count,
       actualPage: req.pagination.page,
       consts: { species: Pet.SPECIES_NAMES, sizes: Pet.SIZE_NAMES },
       data: pets,
