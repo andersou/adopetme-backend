@@ -78,10 +78,12 @@ const registerPetValidation = [
   check("birthdayDate").isDate().toDate(), // formato padrao YYYY/MM/DD
   check("size")
     .isInt({ min: 0, max: 5 })
-    .withMessage("Fora do range permitido"),
+    .withMessage("Fora do range permitido")
+    .toInt(),
   check("specie")
     .isInt({ min: 0, max: 2 })
-    .withMessage("Fora do range permitido"),
+    .withMessage("Fora do range permitido")
+    .toInt(),
   check("simpleDescription")
     .isLength({ min: 3, max: 255 })
     .withMessage("Mínimo 3 caracteres, máximo 255"),

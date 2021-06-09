@@ -80,7 +80,7 @@ router.post(
       let { lastID } = await petDAO.insert(petData);
 
       if (req.files) {
-        for (let file in req.files) {
+        for (let file of req.files) {
           let petPhoto = new PetPhoto();
           petPhoto.petId = lastID;
           petPhoto.photoUri = file.filename;
