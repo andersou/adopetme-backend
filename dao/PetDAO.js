@@ -17,6 +17,20 @@ class PetDAO {
 
     return pets;
   }
+  async fetchFromProtector(protector) {
+    // executa SQL
+    let db = await database.open();
+    let pets = [];
+    await db.each(
+      "SELECT * FROM pets WHERE protectorId = ?",
+      protector.id,
+      (err, petRow) => {
+        if (!err) pets.push(Pet.fromJSON(petRow));
+      }
+    );
+
+    return pets;
+  }
   async fetchPaginated(
     skip,
     limit = 10,

@@ -14,6 +14,12 @@ const upload = multer({
     fileSize: 1024 * 1024,
   },
 });
+router.get("/my", authHelper.authMiddleware, async function (req, res, next) {
+  console.log("oi");
+  let petDAO = new PetDAO();
+  let myPets = await petDAO.fetchFromProtector(req.user);
+  res.json(myPets);
+});
 router.get("/:id", async function (req, res) {
   let petDAO = new PetDAO();
   let pet = null;
@@ -32,6 +38,7 @@ router.get("/:id", async function (req, res) {
   ]);
   res.json(pet);
 });
+
 /* GET pets listing. */
 router.get(
   "/",
