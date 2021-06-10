@@ -1,5 +1,6 @@
 const BaseModel = require("./BaseModel");
 const PetPhotoDAO = require("../dao/PetPhotoDAO");
+const User = require("./User");
 const SPECIES_NAMES = {
   0: "Other",
   1: "Dog",
@@ -60,6 +61,20 @@ class Pet extends BaseModel {
   async loadPetPhotos() {
     let petPhotoDAO = new PetPhotoDAO();
     this.petPhotos = await petPhotoDAO.fetchPhotosFromPet(this);
+  }
+
+  async loadProtector(fields = null) {
+    const UserDAO = require("../dao/UserDAO");
+    let userDAO = new UserDAO();
+    let user = await userDAO.findById(this.protectorId);
+    if (fields) {
+      this.protector = {};
+      for (let field of fields) {
+        this.protector[field] = user[field];
+      }
+    } else {
+      this.protector = user;
+    }
   }
 
   // async isAdopted() {

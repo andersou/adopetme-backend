@@ -23,6 +23,13 @@ router.get("/:id", async function (req, res) {
   } catch (error) {
     return res.status(444).end();
   }
+  await pet.loadProtector([
+    "firstName",
+    "facebookProfile",
+    "photoUri",
+    "city",
+    "state",
+  ]);
   res.json(pet);
 });
 /* GET pets listing. */
