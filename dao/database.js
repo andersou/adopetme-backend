@@ -10,9 +10,10 @@ database = {
     }
     dbOpened = await db.open(path.join(__dirname, ARQUIVO_DB));
     // dbOpened.db = dbOpened.db.verbose();
-    dbOpened.db.on("trace", (sql) => {
-      console.log("executou: " + sql);
-    });
+    if (process.env.DEBUG)
+      dbOpened.db.on("trace", (sql) => {
+        console.log(sql);
+      });
     return dbOpened;
   },
   close() {
