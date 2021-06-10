@@ -38,18 +38,24 @@ class AdoptionDAO {
     );
     return adoptions;
   }
-  async fetchAdoptionsFromAdopter(
-    user,
-    isCancelled = false,
-    isApproved = false
-  ) {
+  async fetchAdoptionsFromAdopter(user, { isCancelled, isApproved }) {
     // executa SQL
     let db = await database.open();
     let adoptions = [];
+    let cancelledSql =
+      isCancelled === true
+        ? "AND cancelledAt NOT NULL"
+        : isCancelled === false
+        ? "AND cancelledAt IS NULL"
+        : "";
+    let approvedSql =
+      isApproved === true
+        ? "AND approvedAt NOT NULL"
+        : isCancelled === false
+        ? "AND approvedAt IS NULL"
+        : "";
     await db.each(
-      `SELECT * FROM adoptions WHERE adopterId = ? ${
-        isCancelled ? "AND cancelledAt NOT NULL" : "AND cancelledAt IS NULL"
-      } ${isApproved ? "AND approvedAt NOT NULL" : "AND approvedAt IS NULL"}`,
+      `SELECT * FROM adoptions WHERE adopterId = ? ${cancelledSql} ${approvedSql}`,
       user.id,
       (err, adoptionRow) => {
         if (!err) adoptions.push(Adoption.fromJSON(adoptionRow));
@@ -58,18 +64,25 @@ class AdoptionDAO {
 
     return adoptions;
   }
-  async fetchAdoptionsFromProtector(
-    user,
-    isCancelled = false,
-    isApproved = false
-  ) {
+  async fetchAdoptionsFromProtector(user, { isCancelled, isApproved }) {
     // executa SQL
     let db = await database.open();
     let adoptions = [];
+
+    let cancelledSql =
+      isCancelled === true
+        ? "AND cancelledAt NOT NULL"
+        : isCancelled === false
+        ? "AND cancelledAt IS NULL"
+        : "";
+    let approvedSql =
+      isApproved === true
+        ? "AND approvedAt NOT NULL"
+        : isCancelled === false
+        ? "AND approvedAt IS NULL"
+        : "";
     await db.each(
-      `SELECT * FROM adoptions WHERE petId IN (SELECT id FROM pets WHERE protectorId = ?) ${
-        isCancelled ? "AND cancelledAt NOT NULL" : "AND cancelledAt IS NULL"
-      } ${isApproved ? "AND approvedAt NOT NULL" : "AND approvedAt IS NULL"}`,
+      `SELECT * FROM adoptions WHERE petId IN (SELECT id FROM pets WHERE protectorId = ?) ${cancelledSql} ${approvedSql}`,
       user.id,
       (err, adoptionRow) => {
         if (!err) adoptions.push(Adoption.fromJSON(adoptionRow));

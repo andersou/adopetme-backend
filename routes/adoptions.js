@@ -131,4 +131,21 @@ router.get("/adopter/requests", async function (req, res) {
   res.json(adoptions);
 });
 
+router.get("/adopter", async function (req, res) {
+  let userDAO = new UserDAO();
+  let adoptionDAO = new AdoptionDAO();
+  let adoptions = await adoptionDAO.fetchAdoptionsFromAdopter(req.user, {
+    isApproved: true,
+  });
+  res.json(adoptions);
+});
+
+router.get("/protector", async function (req, res) {
+  let userDAO = new UserDAO();
+  let adoptionDAO = new AdoptionDAO();
+  let adoptions = await adoptionDAO.fetchAdoptionsFromProtector(req.user, {
+    isApproved: true,
+  });
+  res.json(adoptions);
+});
 module.exports = router;
