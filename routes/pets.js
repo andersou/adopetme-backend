@@ -20,12 +20,15 @@ router.get("/my", authHelper.authMiddleware, async function (req, res, next) {
   let myPets = await petDAO.fetchFromProtector(req.user);
   res.json(myPets);
 });
-router.get("/:id", async function (req, res) {
+router.get("/:id", authHelper.passiveAuthMiddleware, async function (req, res) {
   let petDAO = new PetDAO();
   let pet = null;
   try {
     pet = await petDAO.findById(req.params.id);
     await pet.loadPetPhotos();
+    if (req.user) {
+      await pet.hasRequestFromUser(req.user);
+    }
   } catch (error) {
     return res.status(444).end();
   }

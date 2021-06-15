@@ -77,6 +77,15 @@ class Pet extends BaseModel {
     }
   }
 
+  async hasRequestFromUser(user) {
+    const AdoptionDAO = require("../dao/AdoptionDAO");
+    let adoptionDAO = new AdoptionDAO();
+    this.hasRequested = !!(await adoptionDAO.fetchAdopterAdoptionRequest(
+      user,
+      this
+    ));
+    return this.hasRequested;
+  }
   // async isAdopted() {
   //   const AdoptionDAO = require("../dao/AdoptionDAO");
   //   let adoptionDAO = new AdoptionDAO();

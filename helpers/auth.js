@@ -21,7 +21,22 @@ function authMiddleware(req, res, next) {
     });
   });
 }
+function passiveAuthMiddleware(req, res, next) {
+  const token = req.headers["x-access-token"];
+  const index = blacklist.findIndex((item) => item === token);
+  if (index !== -1) return res.status(401).end();
 
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    //erro nos casos de token ausente ou inválido
+    if (err) return next();
+    let userDAO = new UserDAO();
+    //guardando requisição p/ uso posterior
+    userDAO.findById(decoded.userId).then((user) => {
+      req.user = user;
+      next();
+    });
+  });
+}
 function putOnBlacklist(token) {
   blacklist.push(token);
 }
@@ -52,4 +67,5 @@ module.exports = {
   signToken,
   signEmailToken,
   authEmailMiddleware,
+  passiveAuthMiddleware,
 };

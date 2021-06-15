@@ -29,7 +29,7 @@ router.post("/", async function (req, res) {
   if (!!(await adoptionDAO.fetchPetAdoptionApproved(this))) {
     return res.status(422).json({ msg: "Esse pet já foi adotado" }).end();
   }
-  if (await adoptionDAO.fetchAdopterAdoptionRequest(req.user, pet)) {
+  if (await pet.hasRequestFromUser(req.user)) {
     return res.status(420).json({ msg: "Não seja insistente :)" }).end();
   }
 
