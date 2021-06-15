@@ -158,6 +158,7 @@ router.post(
       score: req.body.score,
       ratedAs: isFromProtector ? "adopter" : "protector",
       adoptionId: adoptionId,
+      message: req.body.message,
     });
 
     res.json(await ratingDAO.insert(rating));
