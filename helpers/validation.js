@@ -1,4 +1,4 @@
-const { check, validationResult } = require("express-validator");
+const { check, validationResult, param } = require("express-validator");
 const UserDAO = require("../dao/UserDAO");
 
 function validationMiddleware(req, res, next) {
@@ -123,9 +123,23 @@ const findPetsValidation = [
   validationMiddleware,
 ];
 
+const ratingValidation = [
+  check("score")
+    .isInt({ min: 0, max: 5 })
+    .withMessage("Fora do range permitido")
+    .toInt(),
+
+  param("adoptionId").isInt().withMessage("Tem que ser um número").toInt(),
+  check("message")
+    .optional()
+    .isLength({ max: 255 })
+    .withMessage("Tamanho máximo 255"),
+  validationMiddleware,
+];
 module.exports = {
   validationMiddleware,
   registerValidation,
   registerPetValidation,
   findPetsValidation,
+  ratingValidation,
 };
