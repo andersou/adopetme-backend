@@ -10,6 +10,9 @@ const UserDAO = require("./dao/UserDAO");
 const Adoption = require("./models/Adoption");
 const AdoptionDAO = require("./dao/AdoptionDAO");
 
+const Rating = require("./models/Rating");
+const RatingDAO = require("./dao/RatingDAO");
+
 const faker = require("faker");
 const fetch = require("node-fetch");
 
@@ -43,6 +46,8 @@ let petDAO = new PetDAO();
 let petPhotoDAO = new PetPhotoDAO();
 let userDAO = new UserDAO();
 let adoptionDAO = new AdoptionDAO();
+let ratingDAO = new RatingDAO();
+
 (async () => {
   //MIGRATION
   console.log("Criando tabela usuário");
@@ -144,4 +149,7 @@ let adoptionDAO = new AdoptionDAO();
 
   //MIGRATION
   await adoptionDAO.create();
+
+  //MIGRATION
+  await ratingDAO.create();
 })();
