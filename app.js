@@ -11,6 +11,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var petsRouter = require("./routes/pets");
 var adoptionsRouter = require("./routes/adoptions");
+var ratingsRouter = require("./routes/ratings");
 
 var app = express();
 app.use(cors());
@@ -23,6 +24,7 @@ apiRouter.use("/", indexRouter);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/pets", petsRouter);
 apiRouter.use("/adoptions", adoptionsRouter);
+apiRouter.use("/ratings", ratingsRouter);
 
 app.use("/api/v1", apiRouter);
 
