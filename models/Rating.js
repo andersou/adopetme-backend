@@ -14,6 +14,7 @@ class Rating extends BaseModel {
     this._ratedAs = 0; //related to "to" user
     this._createdAt = new Date();
     this.adoptionId = 0;
+    this.message = "";
   }
 
   get ratedAs() {

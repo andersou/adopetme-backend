@@ -2,11 +2,13 @@ const express = require("express");
 const UserDAO = require("../dao/UserDAO");
 const AdoptionDAO = require("../dao/AdoptionDAO");
 const User = require("../models/User");
+const Rating = require("../models/Rating");
 const authHelper = require("../helpers/auth");
 const mailerHelper = require("../helpers/mailer");
 const validationHelper = require("../helpers/validation");
 const PetDAO = require("../dao/PetDAO");
 const Adoption = require("../models/Adoption");
+const RatingDAO = require("../dao/RatingDAO");
 
 const router = express.Router();
 router.use(authHelper.authMiddleware);
@@ -53,7 +55,6 @@ router.post("/", async function (req, res) {
 router.post("/:id/approve", async function (req, res) {
   let adoptionId = req.params.id;
   let feedback = req.body.feedback;
-  console.log("oi");
   let adoptionDAO = new AdoptionDAO();
   let adoption = await adoptionDAO.findById(adoptionId);
   //já foi aprovada :)
@@ -84,7 +85,7 @@ router.post("/:id/approve", async function (req, res) {
     await adoptionDAO.update(adoption);
     res.json({ sucess: true });
   } else {
-    res.status(422);
+    res.status(422).end();
   }
 
   //aprova essa
@@ -112,10 +113,56 @@ router.post("/:id/reject", async function (req, res) {
     await adoptionDAO.update(adoption);
     res.json({ sucess: true });
   } else {
-    res.status(422);
+    res.status(422).end();
   }
   //cancela esta requisição
 });
+
+router.post(
+  "/:adoptionId/rate",
+  validationHelper.ratingValidation,
+  async function (req, res) {
+    let adoptionId = req.params.adoptionId;
+    let adoptionDAO = new AdoptionDAO();
+    let ratingDAO = new RatingDAO();
+    let adoption = await adoptionDAO.findById(adoptionId);
+    //validar se já não foi feito (adoptionId) e from (userId)
+    try {
+      await ratingDAO.findAdoptionFromUser(adoptionId, req.user.id);
+      return res.status(422).json({ msg: "00 Erro ao processar a requisição" });
+    } catch (error) {
+      //se nao existir, joga exceção
+    }
+
+    //identificar se é uma adoção (approved_at != null)
+    if (!adoption.approvedAt) {
+      return res.status(422).json({ msg: "01 Erro ao processar a requisição" });
+    }
+
+    //identificar se o usuario é de uma das partes (adotante ou protetor)
+    let isFromProtector = null;
+    if (adoption.adopterId == req.user.id) {
+      isFromProtector = false;
+    } else if ((await adoption.protector()).id == req.user.id) {
+      isFromProtector = true;
+    } else {
+      return res.status(422).json({ msg: "02 Erro ao processar a requisição" });
+    }
+
+    //criar rating
+    let rating = Rating.fromJSON({
+      fromId: req.user.id,
+      toId: isFromProtector
+        ? adoption.adopterId
+        : (await adoption.protector()).id,
+      score: req.body.score,
+      ratedAs: isFromProtector ? "adopter" : "protector",
+      adoptionId: adoptionId,
+    });
+
+    res.json(await ratingDAO.insert(rating));
+  }
+);
 router.get("/protector/requests", async function (req, res) {
   let userDAO = new UserDAO();
   let adoptionDAO = new AdoptionDAO();
