@@ -78,6 +78,7 @@ router.post("/logout", authHelper.authMiddleware, function (req, res) {
   res.end();
 });
 
+
 router.get(
   "/confirm-email/:token",
   authHelper.authEmailMiddleware,
@@ -87,12 +88,14 @@ router.get(
     console.log(user);
     let { changes } = await userDAO.confirmEmail(user);
     if (changes > 0) {
-      res.json({ msg: "Confirmado com sucesso" }).end();
+      //res.json({ msg: "Confirmado com sucesso" }).end();
+      res.redirect(process.env.FRONTEND_URL + "/#/confirmar-email")
     } else {
-      res
-        .status(401)
-        .json({ err: "Você pode já ter confirmado esse email." })
-        .end();
+      // res
+      //   .status(401)
+      //   .json({ err: "Você pode já ter confirmado esse email." })
+      //   .end();
+      res.redirect(process.env.FRONTEND_URL)
     }
   }
 );

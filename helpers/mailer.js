@@ -1,7 +1,7 @@
 const authHelper = require("./auth");
 const nodemailer = require("nodemailer");
 
-const API_ROUTE_CONFIRM_EMAIL = "http://localhost:3000/api/v1/confirm-email/";
+const API_ROUTE_CONFIRM_EMAIL = process.env.BACKEND_URL + "/api/v1/confirm-email/";
 async function sendConfirmEmail(user) {
   let token = authHelper.signEmailToken(user);
   // Generate test SMTP service account from ethereal.email
