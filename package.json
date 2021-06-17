@@ -17,6 +17,7 @@
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.11.1",
     "faker": "^5.5.3",
+    "fb": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",

@@ -5,6 +5,7 @@ const authHelper = require("../helpers/auth");
 const mailerHelper = require("../helpers/mailer");
 const validationHelper = require("../helpers/validation");
 const multer = require("multer");
+const fbSevice = require("../helpers/facebook");
 
 const upload = multer({
   dest: "public/images/users",
@@ -48,7 +49,21 @@ router.post("/login", async (req, res) => {
     res.status(403).end();
   }
 });
+router.post("/fb-login", async (req, res) => {
+  try {
 
+    let access_token = req.body.access_token
+    let user = await fbSevice.getUser(access_token)
+    if (user.id) {
+      const token = authHelper.signToken(user);
+      return res.json({ auth: true, token });
+    }
+
+  } catch (ex) {
+    console.log(ex);
+    res.status(403).end();
+  }
+});
 router.post(
   "/register",
   upload.single("avatar"),
