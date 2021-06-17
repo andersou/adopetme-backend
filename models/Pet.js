@@ -1,6 +1,7 @@
 const BaseModel = require("./BaseModel");
 const PetPhotoDAO = require("../dao/PetPhotoDAO");
 const User = require("./User");
+const _pick = require('lodash/pick')
 const SPECIES_NAMES = {
   0: "Other",
   1: "Dog",
@@ -63,17 +64,13 @@ class Pet extends BaseModel {
     this.petPhotos = await petPhotoDAO.fetchPhotosFromPet(this);
   }
 
-  async loadProtector(fields = null) {
+  async loadProtector(props = []) {
     const UserDAO = require("../dao/UserDAO");
     let userDAO = new UserDAO();
     let user = await userDAO.findById(this.protectorId);
-    if (fields) {
-      this.protector = {};
-      for (let field of fields) {
-        this.protector[field] = user[field];
-      }
-    } else {
-      this.protector = user;
+    if (props.includes("protectorRating")) await user.loadProtectorRatings();
+    if (props) { this.protectorData = _pick(user, props) } else {
+      this.protectorData = user;
     }
   }
 

@@ -52,6 +52,20 @@ class User extends BaseModel {
   static bypassSetJsonProperties() {
     return ["_password"];
   }
+
+  async loadProtectorRatings() {
+    const RatingDAO = require("../dao/RatingDAO")
+    let ratingDAO = new RatingDAO();
+    this.protectorRating = await ratingDAO.calculateRating(this.id, true)
+    return this.protectorRating;
+  }
+
+  async loadAdopterRatings() {
+    const RatingDAO = require("../dao/RatingDAO")
+    let ratingDAO = new RatingDAO();
+    this.adopterRating = await ratingDAO.calculateRating(this.id, false)
+    return this.adopterRating;
+  }
 }
 User.NOT_SENSIBLE_DATA = [
   "firstName",

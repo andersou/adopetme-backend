@@ -52,6 +52,12 @@ class RatingDAO {
       await db.get("SELECT * FROM ratings WHERE id = ?", id)
     );
   }
+  async calculateRating(userId, isProtector = false) {
+    // executa SQL
+    let db = await database.open();
+    return await db.get("SELECT AVG(score) as average, COUNT(score) as count FROM ratings WHERE toId = ? AND ratedAs = ?", userId, isProtector ? 1 : 0)
+
+  }
 
   async findAdoptionFromUser(adoptionId, userId) {
     // executa SQL

@@ -38,6 +38,7 @@ router.get("/:id", authHelper.passiveAuthMiddleware, async function (req, res) {
     "photoUri",
     "city",
     "state",
+    "protectorRating"
   ]);
   res.json(pet);
 });
