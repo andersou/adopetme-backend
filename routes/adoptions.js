@@ -168,6 +168,10 @@ router.get("/protector/requests", async function (req, res) {
   let userDAO = new UserDAO();
   let adoptionDAO = new AdoptionDAO();
   let adoptions = await adoptionDAO.fetchAdoptionRequestProtector(req.user);
+  for(const adoption of adoptions){
+    await adoption.pet()
+    await adoption.adopter()
+  }
   res.json(adoptions);
 });
 router.get("/adopter/requests", async function (req, res) {
@@ -176,6 +180,10 @@ router.get("/adopter/requests", async function (req, res) {
   let adoptions = await adoptionDAO.fetchAllAdoptionsRequestsFromAdopter(
     req.user
   );
+  for(const adoption of adoptions){
+    await adoption.pet()
+    await adoption.protector()
+  }
   res.json(adoptions);
 });
 

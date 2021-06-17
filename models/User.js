@@ -53,4 +53,21 @@ class User extends BaseModel {
     return ["_password"];
   }
 }
+User.NOT_SENSIBLE_DATA = [
+  "firstName",
+  "lastName",
+  "_birthdayDate",
+  "phone",
+  "email",
+  "sex",
+  "_createdAt",
+  "photoUri",
+  "facebookProfile",
+  "address",
+  "number",
+  "complement",
+  "neighborhood",
+  "city",
+  "state",
+  "zipcode",]
 module.exports = User;

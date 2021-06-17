@@ -1,6 +1,9 @@
 const BaseModel = require("./BaseModel");
 const UserDAO = require("../dao/UserDAO");
 const PetDAO = require("../dao/PetDAO");
+
+const _pick = require('lodash/pick')
+const User = require('./User')
 class Adoption extends BaseModel {
   constructor() {
     super();
@@ -17,18 +20,23 @@ class Adoption extends BaseModel {
 
   async pet() {
     let petDAO = new PetDAO();
-    return await petDAO.findById(this.petId);
+    this.petData = await petDAO.findById(this.petId);
+    return this.petData
   }
 
-  async adopter() {
+  async adopter(props = User.NOT_SENSIBLE_DATA) {
     let userDAO = new UserDAO();
-    return await userDAO.findById(this.adopterId);
+    this.adopterData = await userDAO.findById(this.adopterId);
+    if (props) this.adopterData = _pick(this.adopterData, props)
+    return this.adopterData
   }
 
-  async protector() {
+  async protector(props = User.NOT_SENSIBLE_DATA) {
     let pet = await this.pet();
     let userDAO = new UserDAO();
-    return await userDAO.findById(pet.protectorId);
+    this.protectorData = await userDAO.findById(pet.protectorId)
+    if (props) this.protectorData = _pick(this.protectorData, props)
+    return this.protectorData;
   }
 }
 module.exports = Adoption;
