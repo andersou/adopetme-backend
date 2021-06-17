@@ -27,7 +27,8 @@ class Adoption extends BaseModel {
   async adopter(props = User.NOT_SENSIBLE_DATA) {
     let userDAO = new UserDAO();
     this.adopterData = await userDAO.findById(this.adopterId);
-    if (props) this.adopterData = _pick(this.adopterData, props)
+    await this.adopterData.loadAdopterRatings()
+    if (props) this.adopterData = _pick(this.adopterData, ["adopterRating", ...props])
     return this.adopterData
   }
 
@@ -35,7 +36,8 @@ class Adoption extends BaseModel {
     let pet = await this.pet();
     let userDAO = new UserDAO();
     this.protectorData = await userDAO.findById(pet.protectorId)
-    if (props) this.protectorData = _pick(this.protectorData, props)
+    await this.protectorData.loadProtectorRatings()
+    if (props) this.protectorData = _pick(this.protectorData, ["protectorRating", ...props])
     return this.protectorData;
   }
 }
