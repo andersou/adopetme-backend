@@ -8,6 +8,73 @@ function validationMiddleware(req, res, next) {
   } else next();
 }
 
+const updateUserValidation = [
+  check("email")
+    .optional()
+    .isEmail()
+    .withMessage("Não é um email válido")
+    .custom(async (value, { req }) => {
+      //se não está atualizando o email, continua
+      if (req.user.email == value) return;
+
+      let userDAO = new UserDAO();
+      let user = null;
+      try {
+        user = await userDAO.findByEmail(value);
+      } catch (error) { }
+      if (user) throw new Error("email em uso");
+    }),
+  check("firstName").optional()
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Mínimo 3 caracteres"),
+  check("lastName").optional()
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Mínimo 3 caracteres"),
+  check("birthdayDate").optional().isDate().toDate(), // formato padrao YYYY/MM/DD
+  check("password").optional()
+    .isLength({ min: 8, max: 60 })
+    .withMessage("Mínimo de 8 caracteres"),
+  // .isStrongPassword()
+  // .withMessage("Senha fraca"),
+  check("document").optional()
+    .isLength({ min: 11, max: 11 })
+    .withMessage("Documento inválido"),
+  check("sex").optional().isIn(["M", "F", "N"]).withMessage("Valor não permitido"),
+
+  check("phone")
+    .optional()
+    .isMobilePhone(["pt-BR"])
+    .withMessage("Telefone inválido"),
+  check("facebookProfile")
+    .optional()
+    .isURL()
+    .withMessage("O perfil do facebook tem que ser uma URL válida"),
+
+  check("address")
+    .optional()
+    .isLength({ max: 255 })
+    .withMessage("Máximo de 255 caracteres"),
+  check("number")
+    .optional()
+    .isNumeric()
+    .withMessage("Apenas números permitidos"),
+  check("complement")
+    .optional()
+    .isLength({ max: 64 })
+    .withMessage("Máximo 64 caracteres"),
+  check("neighborhood")
+    .optional()
+    .isLength({ max: 64 })
+    .withMessage("Máximo 64 caracteres"),
+  check("city")
+    .optional()
+    .isLength({ max: 64 })
+    .withMessage("Máximo 64 caracteres"),
+
+  check("zipcode").optional().isPostalCode(["BR"]).withMessage("CEP inválido"),
+  validationMiddleware,
+];
+
 const registerValidation = [
   check("email")
     .isEmail()
@@ -70,7 +137,6 @@ const registerValidation = [
   check("zipcode").optional().isPostalCode(["BR"]).withMessage("CEP inválido"),
   validationMiddleware,
 ];
-
 const registerPetValidation = [
   check("name")
     .isLength({ min: 3, max: 255 })
@@ -171,4 +237,5 @@ module.exports = {
   findPetsValidation,
   ratingValidation,
   updatePetValidation,
+  updateUserValidation
 };
