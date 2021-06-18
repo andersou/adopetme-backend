@@ -17,7 +17,7 @@ const registerValidation = [
       let user = null;
       try {
         user = await userDAO.findByEmail(value);
-      } catch (error) {}
+      } catch (error) { }
       if (user) throw new Error("email em uso");
     }),
   check("firstName")
@@ -94,6 +94,34 @@ const registerPetValidation = [
   validationMiddleware,
 ];
 
+const updatePetValidation = [
+  check("name")
+    .optional()
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Mínimo 3 caracteres"),
+  check("birthdayDate").optional().isDate().toDate(), // formato padrao YYYY/MM/DD
+  check("size")
+    .optional()
+    .isInt({ min: 0, max: 4 })
+    .withMessage("Fora do range permitido")
+    .toInt(),
+  check("specie")
+    .optional()
+    .isInt({ min: 0, max: 2 })
+    .withMessage("Fora do range permitido")
+    .toInt(),
+  check("simpleDescription")
+    .optional()
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Mínimo 3 caracteres, máximo 255"),
+  check("detailedDescription")
+    .optional()
+    .isLength({ min: 3, max: 2048 })
+    .withMessage("Mínimo 3 caracteres, máximo 2048"),
+  check("sex").optional().isIn(["M", "F", "N"]).withMessage("Valor não permitido"),
+  validationMiddleware,
+];
+
 const findPetsValidation = [
   check("sort")
     .optional()
@@ -142,4 +170,5 @@ module.exports = {
   registerPetValidation,
   findPetsValidation,
   ratingValidation,
+  updatePetValidation,
 };

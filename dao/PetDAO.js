@@ -51,9 +51,8 @@ class PetDAO {
     if (sortByBirthdayDate) {
       orderSQL = ` ORDER BY birthdayDate ${sortByBirthdayDate}`;
     }
-    let sql = `SELECT * FROM pets ${
-      filtersClauses.length > 0 ? filtersSQL : ""
-    }  ${orderSQL} LIMIT ? OFFSET ?`;
+    let sql = `SELECT * FROM pets ${filtersClauses.length > 0 ? filtersSQL : ""
+      }  ${orderSQL} LIMIT ? OFFSET ?`;
     console.log(sql);
     await db.each(sql, limit, skip, (err, petRow) => {
       if (!err) pets.push(Pet.fromJSON(petRow));
@@ -92,6 +91,22 @@ class PetDAO {
       pet.sex,
       pet.createdAt
     );
+  }
+
+  async update(pet) {
+    let db = await database.open();
+    if (pet.id)
+      return await db.run(
+        "UPDATE pets SET name=? , birthdayDate=?, size=?, specie=? , simpleDescription=?, detailedDescription=?, sex=? WHERE id= ?;",
+        pet.name,
+        pet.birthdayDate,
+        pet._size,
+        pet._specie,
+        pet.simpleDescription,
+        pet.detailedDescription,
+        pet.sex,
+        pet.id
+      );
   }
 }
 

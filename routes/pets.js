@@ -114,6 +114,52 @@ router.post(
     }
   }
 );
+router.put(
+  "/:id",
+  authHelper.authMiddleware,
+  upload.array("photos", 6),
+  validationHelper.updatePetValidation,
+  async function (req, res, next) {
+    let petData = req.body;
+    let petId = req.params.id
+    //carrego o pet
+    //mesclo os dados
+    //faço o update
+    let petDAO = new PetDAO();
+    let petPhotoDAO = new PetPhotoDAO();
+    try {
+      let pet = await petDAO.findById(petId)
+      //se nao for o dono do pet
+
+      if (pet.protectorId != req.user.id) {
+        return res.status(401).end();
+      }
+      //seto os parametros
+      for (let param in petData) {
+        pet[param] = petData[param]
+      }
+
+
+      let { changes } = await petDAO.update(pet);
+
+      if (req.files) {
+        for (let file of req.files) {
+          let petPhoto = new PetPhoto();
+          petPhoto.petId = pet.id;
+          petPhoto.photoUri = file.filename;
+          petPhotoDAO.insert(petPhoto);
+        }
+      }
+
+      res.json({ success: true, changes }).end();
+    } catch (error) {
+      console.log(error);
+      res.status(401).end();
+    }
+  }
+);
+
+
 router.delete(
   "/photo/:id",
   authHelper.authMiddleware,
@@ -124,6 +170,10 @@ router.delete(
     let pet = await petDAO.findById(photo.petId);
     if (pet.protectorId == req.user.id) {
       petPhotoDAO.removePhoto(req.params.id);
+      //falta remover arquivo servidor
+      res.json({ success: true })
+    } else {
+      res.status(422).end();
     }
   }
 );
