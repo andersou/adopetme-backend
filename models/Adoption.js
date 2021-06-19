@@ -21,6 +21,7 @@ class Adoption extends BaseModel {
   async pet() {
     let petDAO = new PetDAO();
     this.petData = await petDAO.findById(this.petId);
+    await this.petData.loadPetPhotos()
     return this.petData
   }
 
