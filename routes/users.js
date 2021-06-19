@@ -24,11 +24,12 @@ router.put("/", authHelper.authMiddleware, upload.single("avatar"),
   validationHelper.updateUserValidation, async function (req, res, next) {
     let user = req.user;
     let userData = req.body
+    let userDAO = new UserDAO();
     //seto os parametros
     for (let param in userData) {
       user[param] = userData[param]
     }
-    let userDAO = new UserDAO();
+    if (req.file) user.photoUri = req.file.filename;
     let { changes } = await userDAO.update(user);
 
     res.json({ success: true, changes });
@@ -38,6 +39,7 @@ router.delete("/photo", authHelper.authMiddleware, async function (req, res) {
   let user = req.user;
   //delete photo aqui
   user.photoUri = "";
+  let userDAO = new UserDAO()
   //falta implementar
   userDAO.update(user);
 });

@@ -70,7 +70,7 @@ class UserDAO {
     let db = await database.open();
     if (user.id)
       return await db.run(
-        "UPDATE  users SET firstName=? ,lastName=? , phone=?,birthdayDate=? ,email=?,isAdmin=? ,password=? ,photoUri=? ,facebookProfile=?,document =?,address =?,number =?,complement=? ,neighborhood =?,city =?,zipcode=?, sex =?, state=?) WHERE id = ?;",
+        "UPDATE  users SET firstName=? ,lastName=? , phone=?,birthdayDate=? ,email=?,isAdmin=? ,password=? ,photoUri=? ,facebookProfile=?,document =?,address =?,number =?,complement=? ,neighborhood =?,city =?,zipcode=?, sex =?, state=? WHERE id = ?;",
         user.firstName,
         user.lastName,
         user.phone,
