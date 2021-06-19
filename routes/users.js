@@ -42,5 +42,6 @@ router.delete("/photo", authHelper.authMiddleware, async function (req, res) {
   let userDAO = new UserDAO()
   //falta implementar
   userDAO.update(user);
+  res.json({ success: true });
 });
 module.exports = router;
