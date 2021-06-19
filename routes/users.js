@@ -36,7 +36,7 @@ router.put("/", authHelper.authMiddleware, upload.single("avatar"),
   });
 
 router.delete("/photo", authHelper.authMiddleware, async function (req, res) {
-  let user = req.user;
+  let user = _omit(req.user, ["email"]);
   //delete photo aqui
   user.photoUri = "";
   let userDAO = new UserDAO()
