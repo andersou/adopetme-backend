@@ -78,13 +78,21 @@ router.post(
 
       let user = await userDAO.findById(result.lastID);
       //gera o token e manda por email
-      await mailerHelper.sendConfirmEmail(user);
+
+
 
       res.json({ success: true, userId: user.id }).end();
+      try {
+        await mailerHelper.sendConfirmEmail(user);
+       
+      } catch (error) {
+        console.log(error);
+      }
     } catch (error) {
       console.log(error);
       res.status(401).end();
     }
+
   }
 );
 
