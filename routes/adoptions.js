@@ -90,7 +90,7 @@ router.post("/:id/approve", async function (req, res) {
 
   //aprova essa
 });
-//falta implementar
+
 router.post("/:id/reject", async function (req, res) {
   let adoptionId = req.params.id;
   let feedback = req.body.feedback;
@@ -117,7 +117,19 @@ router.post("/:id/reject", async function (req, res) {
   }
   //cancela esta requisição
 });
+router.delete("/:id", async function (req, res) {
+  let adoptionId = req.params.id;
+  let adoptionDAO = new AdoptionDAO();
+  let adoption = await adoptionDAO.findById(adoptionId);
 
+  if ((adoption.adopterId == req.user.id) && !adoption.approvedAt) {
+    //depois implementar email de aviso :)
+    await adoptionDAO.remove(adoption);
+    res.json({ sucess: true });
+  } else {
+    res.status(422).end();
+  }
+});
 router.post(
   "/:adoptionId/rate",
   validationHelper.ratingValidation,

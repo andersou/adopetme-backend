@@ -7,6 +7,7 @@ const PetPhoto = require("../models/PetPhoto");
 const validationHelper = require("../helpers/validation");
 const authHelper = require("../helpers/auth");
 const PetPhotoDAO = require("../dao/PetPhotoDAO");
+const AdoptionDAO = require("../dao/AdoptionDAO");
 
 const upload = multer({
   dest: "public/images/pets",
@@ -169,7 +170,7 @@ router.delete(
     let photo = await petPhotoDAO.findById(req.params.id);
     let pet = await petDAO.findById(photo.petId);
     if (pet.protectorId == req.user.id) {
-      petPhotoDAO.removePhoto(req.params.id);
+      await petPhotoDAO.removePhoto(req.params.id);
       //falta remover arquivo servidor
       res.json({ success: true })
     } else {
@@ -195,13 +196,15 @@ router.delete(
 router.delete("/:id", authHelper.authMiddleware, async function (req, res) {
   let petDAO = new PetDAO();
   let petPhotoDAO = new PetPhotoDAO();
+  let adoptionDAO = new AdoptionDAO();
   let petId = req.params.id;
   try {
     let pet = await petDAO.findById(petId);
 
     if (pet.protectorId == req.user.id) {
-      petPhotoDAO.removePhotosFromPet(pet);
-      petDAO.removePet(pet);
+      await petPhotoDAO.removePhotosFromPet(pet);
+      await adoptionDAO.removePetAdoptions(pet)
+      await petDAO.removePet(pet);
     }
 
     res.json({ success: true }).end();

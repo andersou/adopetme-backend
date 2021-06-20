@@ -46,14 +46,14 @@ class AdoptionDAO {
       isCancelled === true
         ? "AND cancelledAt NOT NULL"
         : isCancelled === false
-        ? "AND cancelledAt IS NULL"
-        : "";
+          ? "AND cancelledAt IS NULL"
+          : "";
     let approvedSql =
       isApproved === true
         ? "AND approvedAt NOT NULL"
         : isCancelled === false
-        ? "AND approvedAt IS NULL"
-        : "";
+          ? "AND approvedAt IS NULL"
+          : "";
     await db.each(
       `SELECT * FROM adoptions WHERE adopterId = ? ${cancelledSql} ${approvedSql}`,
       user.id,
@@ -73,14 +73,14 @@ class AdoptionDAO {
       isCancelled === true
         ? "AND cancelledAt NOT NULL"
         : isCancelled === false
-        ? "AND cancelledAt IS NULL"
-        : "";
+          ? "AND cancelledAt IS NULL"
+          : "";
     let approvedSql =
       isApproved === true
         ? "AND approvedAt NOT NULL"
         : isCancelled === false
-        ? "AND approvedAt IS NULL"
-        : "";
+          ? "AND approvedAt IS NULL"
+          : "";
     await db.each(
       `SELECT * FROM adoptions WHERE petId IN (SELECT id FROM pets WHERE protectorId = ?) ${cancelledSql} ${approvedSql}`,
       user.id,
@@ -143,6 +143,15 @@ class AdoptionDAO {
       adoption.feedback,
       pet.id
     );
+  }
+
+  async removePetAdoptions(pet) {
+    let db = await database.open();
+    if (pet.id) return await db.run("DELETE FROM adoptions WHERE petId = ? ", pet.id);
+  }
+  async remove(adoption) {
+    let db = await database.open();
+    if (adoption.id) return await db.run("DELETE FROM adoptions WHERE id = ? ", adoption.id);
   }
 }
 
