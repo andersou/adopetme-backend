@@ -74,7 +74,7 @@ router.get(
       await pet.loadPetPhotos();
       await pet.loadProtector(["firstName", "lastName"])
     };
-    let count = await petDAO.countPets();
+    let count = await petDAO.countPets(req.query.filters);
     let pageCount = Math.ceil(count / req.pagination.limit);
     res.json({
       pageCount,

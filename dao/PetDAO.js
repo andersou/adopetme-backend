@@ -35,7 +35,8 @@ class PetDAO {
     skip,
     limit = 10,
     filters = {},
-    sortByBirthdayDate = false
+    sortByBirthdayDate = false,
+    removeAdopteds = true
   ) {
     // executa SQL
     let db = await database.open();
@@ -45,6 +46,7 @@ class PetDAO {
     for (let filter in filters) {
       filtersClauses.push(` ${filter} = '${filters[filter]}' `);
     }
+    if (removeAdopteds) filtersClauses.push("id NOT IN(SELECT petId FROM adoptions WHERE approvedAt NOT NULL)")
     let filtersSQL = `WHERE ${filtersClauses.join("AND")}`;
 
     let orderSQL = "";
@@ -60,17 +62,26 @@ class PetDAO {
 
     return pets;
   }
+
+  async countPets(filters = {}, removeAdopteds = true) {
+    let filtersClauses = [];
+    for (let filter in filters) {
+      filtersClauses.push(` ${filter} = '${filters[filter]}' `);
+    }
+    if (removeAdopteds) filtersClauses.push("id NOT IN(SELECT petId FROM adoptions WHERE approvedAt NOT NULL)")
+    let filtersSQL = `WHERE ${filtersClauses.join("AND")}`;
+    // executa SQL
+    let db = await database.open();
+    return (await db.get(`SELECT COUNT(id) as counter FROM pets ${filtersClauses.length > 0 ? filtersSQL : ""}`)).counter;
+  }
+
   async findById(id) {
     // executa SQL
     let db = await database.open();
     return Pet.fromJSON(await db.get("SELECT * FROM pets WHERE id = ?", id));
   }
 
-  async countPets() {
-    // executa SQL
-    let db = await database.open();
-    return (await db.get("SELECT COUNT(id) as counter FROM pets")).counter;
-  }
+
 
   async removePet(pet) {
     let db = await database.open();
