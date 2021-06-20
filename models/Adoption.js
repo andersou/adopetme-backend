@@ -3,7 +3,7 @@ const UserDAO = require("../dao/UserDAO");
 const PetDAO = require("../dao/PetDAO");
 
 const _pick = require('lodash/pick')
-const User = require('./User')
+const User = require('./User');
 class Adoption extends BaseModel {
   constructor() {
     super();
@@ -40,6 +40,14 @@ class Adoption extends BaseModel {
     await this.protectorData.loadProtectorRatings()
     if (props) this.protectorData = _pick(this.protectorData, ["protectorRating", ...props])
     return this.protectorData;
+  }
+
+  async loadHasRated(fromUserId) {
+
+    const AdoptionDAO = require("../dao/AdoptionDAO");
+    const adoptionDAO = new AdoptionDAO()
+    this.hasRated = adoptionDAO.hasRated(this.id, fromUserId);
+    return this.hasRated;
   }
 }
 module.exports = Adoption;

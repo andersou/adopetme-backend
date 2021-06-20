@@ -183,6 +183,7 @@ router.get("/protector/requests", async function (req, res) {
   for (const adoption of adoptions) {
     await adoption.pet()
     await adoption.adopter()
+    await adoption.loadHasRated(req.user.id)
   }
   res.json(adoptions);
 });
@@ -195,6 +196,7 @@ router.get("/adopter/requests", async function (req, res) {
   for (const adoption of adoptions) {
     await adoption.pet()
     await adoption.protector()
+    await adoption.loadHasRated(req.user.id)
   }
   res.json(adoptions);
 });
