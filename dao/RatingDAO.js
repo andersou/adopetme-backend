@@ -84,6 +84,12 @@ class RatingDAO {
       rating.message
     );
   }
+  async hasRated(adoptionId, userId) {
+    let db = await database.open();
+    return await db.get(
+      "SELECT * FROM ratings WHERE fromId = ? AND adoptionId = ?", userId, adoptionId
+    );
+  }
 }
 
 module.exports = RatingDAO;

@@ -154,12 +154,7 @@ class AdoptionDAO {
     if (adoption.id) return await db.run("DELETE FROM adoptions WHERE id = ? ", adoption.id);
   }
 
-  async hasRated(adoptionId, userId) {
-    let db = await database.open();
-    return await db.get(
-      "SELECT id FROM adoptions WHERE fromId = ? AND id = ?", userId, adoptionId
-    );
-  }
+  
 }
 
 module.exports = AdoptionDAO;

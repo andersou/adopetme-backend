@@ -144,6 +144,7 @@ router.post(
       return res.status(422).json({ msg: "00 Erro ao processar a requisição" });
     } catch (error) {
       //se nao existir, joga exceção
+      console.log(error)
     }
 
     //identificar se é uma adoção (approved_at != null)

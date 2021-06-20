@@ -44,9 +44,9 @@ class Adoption extends BaseModel {
 
   async loadHasRated(fromUserId) {
 
-    const AdoptionDAO = require("../dao/AdoptionDAO");
-    const adoptionDAO = new AdoptionDAO()
-    this.hasRated = adoptionDAO.hasRated(this.id, fromUserId);
+    const RatingDAO = require("../dao/RatingDAO");
+    const ratingDAO = new RatingDAO()
+    this.hasRated = await ratingDAO.hasRated(this.id, fromUserId);
     return this.hasRated;
   }
 }
