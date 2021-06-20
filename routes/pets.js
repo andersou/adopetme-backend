@@ -70,7 +70,10 @@ router.get(
       req.query.filters,
       req.query.sort
     );
-    for (let pet of pets) { await pet.loadPetPhotos(); await pet.loadProtector() };
+    for (let pet of pets) {
+      await pet.loadPetPhotos();
+      await pet.loadProtector(["firstName", "lastName"])
+    };
     let count = await petDAO.countPets();
     let pageCount = Math.ceil(count / req.pagination.limit);
     res.json({

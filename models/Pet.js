@@ -69,7 +69,7 @@ class Pet extends BaseModel {
     let userDAO = new UserDAO();
     let user = await userDAO.findById(this.protectorId);
     if (props.includes("protectorRating")) await user.loadProtectorRatings();
-    if (props) { this.protectorData = _pick(user, props) } else {
+    if (props.length) { this.protectorData = _pick(user, props) } else {
       this.protectorData = user;
     }
   }
