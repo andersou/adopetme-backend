@@ -200,8 +200,8 @@ router.delete("/:id", authHelper.authMiddleware, async function (req, res) {
     let pet = await petDAO.findById(petId);
 
     if (pet.protectorId == req.user.id) {
-      petDAO.removePet(pet);
       petPhotoDAO.removePhotosFromPet(pet);
+      petDAO.removePet(pet);
     }
 
     res.json({ success: true }).end();
