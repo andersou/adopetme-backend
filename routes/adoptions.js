@@ -212,6 +212,7 @@ router.get("/adopter", async function (req, res) {
 
   for (let adoption of adoptions) {
     await adoption.pet()
+    await adoption.petData.loadProtector(["protectorRating", ...User.NOT_SENSIBLE_DATA])
   }
   res.json(adoptions);
 });
@@ -222,6 +223,10 @@ router.get("/protector", async function (req, res) {
   let adoptions = await adoptionDAO.fetchAdoptionsFromProtector(req.user, {
     isApproved: true,
   });
+  for (let adoption of adoptions) {
+    await adoption.pet()
+    await adoption.adopter()
+  }
   res.json(adoptions);
 });
 module.exports = router;
