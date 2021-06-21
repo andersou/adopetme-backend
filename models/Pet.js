@@ -83,11 +83,12 @@ class Pet extends BaseModel {
     ));
     return this.hasRequested;
   }
-  // async isAdopted() {
-  //   const AdoptionDAO = require("../dao/AdoptionDAO");
-  //   let adoptionDAO = new AdoptionDAO();
-  //   return !!(await adoptionDAO.fetchPetAdoptionApproved(this));
-  // }
+  async loadIsAdopted() {
+    const AdoptionDAO = require("../dao/AdoptionDAO");
+    let adoptionDAO = new AdoptionDAO();
+    this.isAdopted = !!(await adoptionDAO.fetchPetAdoptionApproved(this))
+    return this.isAdopted;
+  }
   set birthdayDate(newBirthdayDate) {
     this._birthdayDate =
       newBirthdayDate instanceof Date

@@ -16,10 +16,9 @@ const upload = multer({
   },
 });
 router.get("/my", authHelper.authMiddleware, async function (req, res, next) {
-  console.log("oi");
   let petDAO = new PetDAO();
   let myPets = await petDAO.fetchFromProtector(req.user);
-  for (let pet of myPets) await pet.loadPetPhotos();
+  for (let pet of myPets) { await pet.loadIsAdopted(); await pet.loadPetPhotos(); }
   res.json(myPets);
 });
 router.get("/:id", authHelper.passiveAuthMiddleware, async function (req, res) {
