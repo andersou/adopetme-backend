@@ -68,6 +68,7 @@ class User extends BaseModel {
   }
 }
 User.NOT_SENSIBLE_DATA = [
+  "id",
   "firstName",
   "lastName",
   "_birthdayDate",

@@ -153,6 +153,7 @@ router.post(
     }
 
     //identificar se o usuario é de uma das partes (adotante ou protetor)
+    console.log(await adoption.protector())
     let isFromProtector = null;
     if (adoption.adopterId == req.user.id) {
       isFromProtector = false;
