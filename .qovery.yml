@@ -1,0 +1,11 @@
+---
+application:
+  name: "adopetme-backend"
+  project: "adopetme-project"
+  organization: "QoveryCommunity"
+routers:
+- name: "main-adopetme-backend"
+  routes:
+  - application_name: "adopetme-backend"
+    paths:
+    - "/*"
