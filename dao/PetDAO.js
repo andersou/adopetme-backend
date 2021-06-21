@@ -46,7 +46,7 @@ class PetDAO {
     for (let filter in filters) {
       filtersClauses.push(` ${filter} = '${filters[filter]}' `);
     }
-    if (removeAdopteds) filtersClauses.push("id NOT IN(SELECT petId FROM adoptions WHERE approvedAt NOT NULL)")
+    if (removeAdopteds) filtersClauses.push(" id NOT IN(SELECT petId FROM adoptions WHERE approvedAt NOT NULL) ")
     let filtersSQL = `WHERE ${filtersClauses.join("AND")}`;
 
     let orderSQL = "";
@@ -68,7 +68,7 @@ class PetDAO {
     for (let filter in filters) {
       filtersClauses.push(` ${filter} = '${filters[filter]}' `);
     }
-    if (removeAdopteds) filtersClauses.push("id NOT IN(SELECT petId FROM adoptions WHERE approvedAt NOT NULL)")
+    if (removeAdopteds) filtersClauses.push(" id NOT IN(SELECT petId FROM adoptions WHERE approvedAt NOT NULL) ")
     let filtersSQL = `WHERE ${filtersClauses.join("AND")}`;
     // executa SQL
     let db = await database.open();
