@@ -213,6 +213,7 @@ router.get("/adopter", async function (req, res) {
   for (let adoption of adoptions) {
     await adoption.pet()
     await adoption.petData.loadProtector(["protectorRating", ...User.NOT_SENSIBLE_DATA])
+    await adoption.loadHasRated(req.user.id)
   }
   res.json(adoptions);
 });
@@ -226,6 +227,7 @@ router.get("/protector", async function (req, res) {
   for (let adoption of adoptions) {
     await adoption.pet()
     await adoption.adopter()
+    await adoption.loadHasRated(req.user.id)
   }
   res.json(adoptions);
 });
