@@ -65,7 +65,7 @@ router.post("/:id/approve", async function (req, res) {
   let pet = await adoption.pet();
 
   //pet já adotado :(
-  if (!!(await adoptionDAO.fetchPetAdoptionApproved(this))) {
+  if (!!(await adoptionDAO.fetchPetAdoptionApproved(pet))) {
     return res.status(422).json({ msg: "Esse pet já foi adotado" }).end();
   }
   //apenas o dono pode aprovar

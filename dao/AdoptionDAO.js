@@ -138,8 +138,9 @@ class AdoptionDAO {
   async updatePetAdoptions(adoption, pet) {
     let db = await database.open();
     return await db.run(
-      "UPDATE adoptions SET cancelledAt = ?, feedback = ? WHERE petId = ? AND cancelledAt NOT NULL",
+      "UPDATE adoptions SET cancelledAt = ?, approvedAt= ?, feedback = ? WHERE petId = ? AND cancelledAt IS NULL",
       adoption.cancelledAt,
+      adoption.approvedAt,
       adoption.feedback,
       pet.id
     );
@@ -154,7 +155,7 @@ class AdoptionDAO {
     if (adoption.id) return await db.run("DELETE FROM adoptions WHERE id = ? ", adoption.id);
   }
 
-  
+
 }
 
 module.exports = AdoptionDAO;
